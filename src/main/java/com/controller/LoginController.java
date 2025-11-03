@@ -1,4 +1,4 @@
-package com.repsandrecords.app;
+package com.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.repsandrecords.app.DBconnection;
+import com.utils.DBconnection;
 
 public class LoginController {
 

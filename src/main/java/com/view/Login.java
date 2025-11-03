@@ -1,4 +1,4 @@
-package com.repsandrecords.app;
+package com.view;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
