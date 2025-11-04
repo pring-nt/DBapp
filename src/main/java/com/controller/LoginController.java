@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.utils.DBconnection;
+import com.utils.DBConnection;
 
 public class LoginController {
 
@@ -49,7 +49,7 @@ public class LoginController {
         }
 
         // Check the database if not admin
-        try (Connection conn = DBconnection.getConnection()) {
+        try (Connection conn = DBConnection.getConnection()) {
             String query = "SELECT * FROM users WHERE username = ? AND password = ?";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1, username);
