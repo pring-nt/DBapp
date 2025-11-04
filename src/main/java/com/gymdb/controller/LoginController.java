@@ -1,4 +1,4 @@
-package com.controller;
+package com.gymdb.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.utils.DBConnection;
+import com.gymdb.utils.DBConnection;
 
 public class LoginController {
 

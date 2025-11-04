@@ -1,4 +1,4 @@
-package com.utils;
+package com.gymdb.utils;
 
 import java.io.InputStream;
 import java.sql.Connection;
