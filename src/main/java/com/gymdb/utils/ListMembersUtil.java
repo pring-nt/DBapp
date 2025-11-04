@@ -1,11 +1,11 @@
-package com.model;
+package com.gymdb.utils;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Member {
+public class ListMembersUtil {
     private final IntegerProperty id = new SimpleIntegerProperty();
     private final StringProperty fullName = new SimpleStringProperty();
     private final StringProperty username = new SimpleStringProperty();
@@ -16,9 +16,9 @@ public class Member {
     private final StringProperty chosenService = new SimpleStringProperty();
     private final StringProperty plan = new SimpleStringProperty();
 
-    public Member(int id, String fullName, String username, String gender,
-                  String contactNumber, String dateOfBirth, String amount,
-                  String chosenService, String plan) {
+    public ListMembersUtil(int id, String fullName, String username, String gender,
+                           String contactNumber, String dateOfBirth, String amount,
+                           String chosenService, String plan) {
         this.id.set(id);
         this.fullName.set(fullName);
         this.username.set(username);

@@ -1,4 +1,4 @@
-package com.controller;
+package com.gymdb.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

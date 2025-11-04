@@ -1,4 +1,4 @@
-package com.test;
+package com.gymdb.test;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
