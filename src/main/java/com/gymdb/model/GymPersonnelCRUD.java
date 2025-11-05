@@ -7,7 +7,7 @@ import com.gymdb.utils.DBConnection;
 
 public class GymPersonnelCRUD {
 
-    // CREATE
+    // create
     public boolean addRecord(GymPersonnel personnel) {
         String sql = "INSERT INTO GymPersonnel (firstName, lastName, personnelType, schedule, instructorRecord, speciality) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
@@ -26,7 +26,7 @@ public class GymPersonnelCRUD {
         }
     }
 
-    // READ ALL
+    // read all
     public List<GymPersonnel> getAllRecords() {
         List<GymPersonnel> list = new ArrayList<>();
         String sql = "SELECT * FROM GymPersonnel";
@@ -53,7 +53,7 @@ public class GymPersonnelCRUD {
         return list;
     }
 
-    // READ ONE
+    // read one
     public GymPersonnel getRecord(int id) {
         String sql = "SELECT * FROM GymPersonnel WHERE personnelID = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -77,7 +77,7 @@ public class GymPersonnelCRUD {
         return null;
     }
 
-    // UPDATE
+    // update
     public boolean modRecord(GymPersonnel personnel) {
         String sql = "UPDATE GymPersonnel SET firstName=?, lastName=?, personnelType=?, schedule=?, instructorRecord=?, speciality=? WHERE personnelID=?";
         try (Connection conn = DBConnection.getConnection();
@@ -97,7 +97,7 @@ public class GymPersonnelCRUD {
         }
     }
 
-    // DELETE
+    // delete
     public boolean delRecord(int id) {
         String sql = "DELETE FROM GymPersonnel WHERE personnelID=?";
         try (Connection conn = DBConnection.getConnection();

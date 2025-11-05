@@ -8,6 +8,7 @@ import com.gymdb.utils.DBConnection;
 
 public class AttendanceCRUD {
 
+    // create
     public boolean addRecord(Attendance attendance) {
         String sql = "INSERT INTO Attendance (memberID, classID) VALUES (?, ?)";
         try (Connection conn = DBConnection.getConnection();
@@ -22,6 +23,7 @@ public class AttendanceCRUD {
         }
     }
 
+    // read all
     public List<Attendance> getAllRecords() {
         List<Attendance> list = new ArrayList<>();
         String sql = "SELECT * FROM Attendance";
@@ -50,6 +52,7 @@ public class AttendanceCRUD {
         return list;
     }
 
+    // read one
     public Attendance getRecord(int id) {
         String sql = "SELECT * FROM Attendance WHERE attendanceID = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -77,6 +80,7 @@ public class AttendanceCRUD {
         return null;
     }
 
+    // update
     public boolean modRecord(int attendanceID, int newMemberID, int newClassID) {
         String sql = "UPDATE Attendance SET memberID = ?, classID = ? WHERE attendanceID = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -92,6 +96,7 @@ public class AttendanceCRUD {
         }
     }
 
+    // delete
     public boolean delRecord(int attendanceID) {
         String sql = "DELETE FROM Attendance WHERE attendanceID = ?";
         try (Connection conn = DBConnection.getConnection();
