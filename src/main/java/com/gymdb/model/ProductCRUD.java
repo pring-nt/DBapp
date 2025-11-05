@@ -20,7 +20,7 @@ public class ProductCRUD {
             return true;
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
     }
@@ -45,7 +45,7 @@ public class ProductCRUD {
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
 
         return list;
@@ -70,7 +70,7 @@ public class ProductCRUD {
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
 
         return null;
@@ -90,7 +90,7 @@ public class ProductCRUD {
             return true;
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
     }
@@ -105,7 +105,7 @@ public class ProductCRUD {
             return true;
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
     }
