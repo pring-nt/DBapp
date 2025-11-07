@@ -1,19 +1,25 @@
 package com.gymdb.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.gymdb.utils.DBConnection;
+import javafx.stage.Stage;
 
-public class LoginController {
+public class AdminLoginController {
 
     @FXML
     private TextField usernameField;
@@ -71,14 +77,28 @@ public class LoginController {
 
     @FXML
     private void handleStaffLogin(ActionEvent event) {
-        showAlert("Staff Login", "Redirecting to Staff Login...");
-        // TODO: Add staff login behavior (e.g., load staff dashboard)
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/StaffLogin.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void handleCustomerLogin(ActionEvent event) {
-        showAlert("Customer Login", "Redirecting to Customer Login...");
-        // TODO: Add customer login behavior
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/CustomerLogin.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showAlert(String title, String message) {

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gymdb.controller.StaffLoginController">
+
+   <children>
+      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../pngs/stafflogin_bg.png" />
+         </image>
+      </ImageView>
+
+      <TextField fx:id="usernameField" layoutX="193.0" layoutY="200.0" prefHeight="26.0" prefWidth="248.0" promptText="Username" />
+      <TextField fx:id="passwordField" layoutX="193.0" layoutY="236.0" prefHeight="26.0" prefWidth="248.0" promptText="Password" />
+      <Button fx:id="adminLogin" layoutX="160.0" layoutY="318.0" mnemonicParsing="false" onAction="#handleAdmin" opacity="0.0" prefHeight="26.0" prefWidth="83.0" />
+      <Button fx:id="customerLogin" layoutX="372.0" layoutY="318.0" mnemonicParsing="false" onAction="#handleCustomer" opacity="0.0" prefHeight="26.0" prefWidth="83.0" />
+      <Button fx:id="loginButton" layoutX="246.0" layoutY="278.0" mnemonicParsing="false" onAction="#handleLogin" opacity="0.0" prefHeight="36.0" prefWidth="117.0" />
+   </children>
+</AnchorPane>

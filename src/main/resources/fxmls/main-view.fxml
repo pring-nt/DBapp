@@ -9,12 +9,13 @@
    <children>
       <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@main_bg.png" />
+            <Image url="@../pngs/main_bg.png" />
          </image>
       </ImageView>
       <Button fx:id="btnAllMembers" layoutX="50.0" layoutY="202.0" mnemonicParsing="false" onAction="#handleAllMembers" opacity="0.0" prefHeight="99.0" prefWidth="105.0" text="Button" />
       <Button fx:id="btnEntryForm" layoutX="180.0" layoutY="202.0" mnemonicParsing="false" onAction="#handleEntryForm" opacity="0.0" prefHeight="99.0" prefWidth="105.0" text="Button" />
       <Button fx:id="btnRemove" layoutX="313.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleRemove" opacity="0.0" prefHeight="99.0" prefWidth="105.0" text="Button" />
       <Button fx:id="btnUpdate" layoutX="445.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleUpdate" opacity="0.0" prefHeight="99.0" prefWidth="105.0" text="Button" />
+      <Button fx:id="btnBackMain" layoutX="242.0" layoutY="340.0" mnemonicParsing="false" onAction="#handleBackMain" opacity="0.0" prefHeight="33.0" prefWidth="141.0" text="Button" />
    </children>
 </AnchorPane>

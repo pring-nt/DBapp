@@ -113,10 +113,10 @@ public class MemberCRUD {
 
     public boolean modRecord(Member m) {
         String sql =
-                "UPDATE Member" +
-                "SET first_name=?, last_name=?, email=?, contact_no=?, membership_type=?," +
-                "start_date=?, end_date=?, health_goal=?, initial_weight=?, goal_weight=?," +
-                "start_bmi=?, updated_bmi=?, classID=?, trainerID=?, lockerID=?" +
+                "UPDATE Member " +
+                "SET first_name=?, last_name=?, email=?, contact_no=?, membership_type=?, " +
+                "start_date=?, end_date=?, health_goal=?, initial_weight=?, goal_weight=?, " +
+                "start_bmi=?, updated_bmi=?, classID=?, trainerID=?, lockerID=? " +
                 "WHERE memberID=?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
