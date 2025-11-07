@@ -17,7 +17,7 @@
     </properties>
 
     <repositories>
-        <!-- 🔧 Add central Maven repo (so dependencies actually resolve) -->
+        <!-- Add central Maven repo (so dependencies actually resolve) -->
         <repository>
             <id>central</id>
             <url>https://repo.maven.apache.org/maven2</url>
@@ -25,7 +25,7 @@
     </repositories>
 
     <dependencies>
-        <!-- ✅ JavaFX dependencies -->
+        <!-- JavaFX dependencies -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -42,7 +42,7 @@
             <version>${javafx.version}</version>
         </dependency>
 
-        <!-- ✅ MySQL Connector (for DB connection) -->
+        <!-- MySQL Connector (for DB connection) -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
@@ -52,7 +52,7 @@
 
     <build>
         <plugins>
-            <!-- ✅ JavaFX Maven Plugin -->
+            <!-- JavaFX Maven Plugin -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
