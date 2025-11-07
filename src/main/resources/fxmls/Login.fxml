@@ -16,7 +16,7 @@
       <!-- Background -->
       <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@login_bg.png" />
+            <Image url="@../pngs/login_bg.png" />
          </image>
       </ImageView>
 
@@ -45,7 +45,7 @@
          <graphic>
             <ImageView fitHeight="125.0" fitWidth="126.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@login_button.png" />
+                  <Image url="@../pngs/login_button.png" />
                </image>
             </ImageView>
          </graphic>
@@ -62,7 +62,7 @@
          <graphic>
             <ImageView fitHeight="125.0" fitWidth="126.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@staff_login.png" />
+                  <Image url="@../pngs/staff_login.png" />
                </image>
             </ImageView>
          </graphic>
@@ -79,7 +79,7 @@
          <graphic>
             <ImageView fitHeight="125.0" fitWidth="126.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@customer_login.png" />
+                  <Image url="@../pngs/customer_login.png" />
                </image>
             </ImageView>
          </graphic>

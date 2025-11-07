@@ -10,7 +10,7 @@
    <children>
       <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@addequipment_bg.png" />
+            <Image url="@../pngs/addequipment_bg.png" />
          </image>
       </ImageView>
       <TextField id="equipment_info" layoutX="130.0" layoutY="133.0" prefHeight="26.0" prefWidth="145.0" />

@@ -13,7 +13,7 @@ public class MainController {
 
     @FXML
     private void handleAllMembers(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/list_members.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/list_members.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
@@ -21,7 +21,7 @@ public class MainController {
 
     @FXML
     private void handleEntryForm(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/entry_form.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/entry_form.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();

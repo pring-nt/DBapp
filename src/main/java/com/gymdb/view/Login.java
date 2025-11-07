@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 public class Login extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/Login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/Login.fxml"));
         Scene scene = new Scene(root);
 
         primaryStage.setTitle("Reps and Records");

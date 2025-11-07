@@ -10,11 +10,11 @@ public class EquipmentLauncher extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Equipment.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/Equipment.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
 
-        primaryStage.setTitle("Reps and Records - Main Menu");
+        primaryStage.setTitle("Reps and Records");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

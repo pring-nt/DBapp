@@ -65,7 +65,7 @@ public class ListMembersController {
 
     @FXML
     private void handleBack(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/main-view.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/main-view.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();

@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 public class SceneTester extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/main-view.fxml"));
         Scene scene = new Scene(loader.load());
         stage.setTitle("Scene Tester");
         stage.setScene(scene);
