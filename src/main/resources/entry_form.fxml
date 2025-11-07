@@ -9,7 +9,7 @@
    <children>
       <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@member_form.png" />
+            <Image url="@member.png" />
          </image>
       </ImageView>
       <Button fx:id="btnBack" layoutX="322.0" layoutY="347.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="25.0" prefWidth="107.0" text="Button" />
