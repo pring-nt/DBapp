@@ -1,18 +1,17 @@
- package com.gymdb.view;
+package com.gymdb.launcher;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Login extends Application {
+public class CustomerLoginLauncher extends Application {
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/Login.fxml"));
-        Scene scene = new Scene(root);
-
-        primaryStage.setTitle("Reps and Records");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/CustomerLogin.fxml"));
+        Scene scene = new Scene(loader.load());
+        primaryStage.setTitle("Customer Login");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
