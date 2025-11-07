@@ -10,10 +10,10 @@ public class MemberCRUD {
 
     public boolean addRecord(Member m) {
         String sql =
-                    "INSERT INTO Member (first_name, last_name, email, contact_no, membership_type," +
-                    "start_date, end_date, health_goal, initial_weight, goal_weight," +
-                    "start_bmi, updated_bmi, classID, trainerID, lockerID)" +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "INSERT INTO Member (first_name, last_name, email, contact_no, membership_type, " +
+                    "start_date, end_date, health_goal, initial_weight, goal_weight, " +
+                    "start_bmi, updated_bmi, classID, trainerID, lockerID) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
