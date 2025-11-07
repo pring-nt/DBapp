@@ -1,18 +1,20 @@
- package com.gymdb.view;
+package com.gymdb.launcher;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.Parent;
 
-public class Login extends Application {
+public class EquipmentLauncher extends Application {
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/Login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Equipment.fxml"));
+        Parent root = loader.load();
         Scene scene = new Scene(root);
 
-        primaryStage.setTitle("Reps and Records");
+        primaryStage.setTitle("Reps and Records - Main Menu");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

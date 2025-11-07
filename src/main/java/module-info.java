@@ -14,4 +14,5 @@ module com.example.dbapp {
     opens com.gymdb.utils to javafx.fxml;
     exports com.gymdb.controller;
     opens com.gymdb.controller to javafx.fxml;
+    opens com.gymdb.launcher to javafx.graphics;
 }
