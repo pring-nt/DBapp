@@ -18,7 +18,7 @@ public class MemberFeedbackCRUD {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
     }
@@ -42,7 +42,7 @@ public class MemberFeedbackCRUD {
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
         return list;
     }
@@ -63,7 +63,7 @@ public class MemberFeedbackCRUD {
                 );
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
         return null;
     }
@@ -80,7 +80,7 @@ public class MemberFeedbackCRUD {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
     }
@@ -94,7 +94,7 @@ public class MemberFeedbackCRUD {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
     }

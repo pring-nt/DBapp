@@ -27,7 +27,7 @@ public class LockerCRUD {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
     }
@@ -50,7 +50,7 @@ public class LockerCRUD {
                 list.add(l);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
         return list;
     }
@@ -72,7 +72,7 @@ public class LockerCRUD {
                 );
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
         return null;
     }
@@ -99,7 +99,7 @@ public class LockerCRUD {
             return true;
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
     }
@@ -112,7 +112,7 @@ public class LockerCRUD {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
     }

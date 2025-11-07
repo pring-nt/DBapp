@@ -21,7 +21,7 @@ public class GymPersonnelCRUD {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println("addRecord error: " + e.getMessage());
+            System.err.println("addRecord error: " + e.getMessage());
             return false;
         }
     }
@@ -48,7 +48,7 @@ public class GymPersonnelCRUD {
             }
 
         } catch (SQLException e) {
-            System.out.println("getAllRecords error: " + e.getMessage());
+            System.err.println("getAllRecords error: " + e.getMessage());
         }
         return list;
     }
@@ -72,7 +72,7 @@ public class GymPersonnelCRUD {
                 );
             }
         } catch (SQLException e) {
-            System.out.println("getRecord error: " + e.getMessage());
+            System.err.println("getRecord error: " + e.getMessage());
         }
         return null;
     }
@@ -92,7 +92,7 @@ public class GymPersonnelCRUD {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println("modRecord error: " + e.getMessage());
+            System.err.println("modRecord error: " + e.getMessage());
             return false;
         }
     }
@@ -106,7 +106,7 @@ public class GymPersonnelCRUD {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println("delRecord error: " + e.getMessage());
+            System.err.println("delRecord error: " + e.getMessage());
             return false;
         }
     }
