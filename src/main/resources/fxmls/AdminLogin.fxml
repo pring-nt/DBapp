@@ -23,36 +23,12 @@
       <TextField fx:id="passwordField" layoutX="195.0" layoutY="239.0" prefHeight="26.0" prefWidth="246.0" promptText="Password" />
 
       <!-- Login Button -->
-      <Button fx:id="loginButton" layoutX="241.0" layoutY="229.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="48.0" prefWidth="102.0" style="-fx-padding: 0; -fx-border-color: transparent; -fx-background-color: transparent;">
-         <graphic>
-            <ImageView fitHeight="125.0" fitWidth="126.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../pngs/login_button.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
+      <Button fx:id="loginButton" layoutX="252.0" layoutY="273.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="40.0" prefWidth="113.0" style="-fx-padding: 0; -fx-border-color: transparent; -fx-background-color: transparent;" />
 
       <!-- Staff Login Button -->
-      <Button fx:id="staffLoginButton" layoutX="143.0" layoutY="273.0" mnemonicParsing="false" onAction="#handleStaffLogin" prefHeight="48.0" prefWidth="102.0" style="-fx-padding: 0; -fx-border-color: transparent; -fx-background-color: transparent;">
-         <graphic>
-            <ImageView fitHeight="125.0" fitWidth="126.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../pngs/staff_login.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
+      <Button fx:id="staffLoginButton" layoutX="372.0" layoutY="319.0" mnemonicParsing="false" onAction="#handleStaffLogin" prefHeight="26.0" prefWidth="85.0" style="-fx-padding: 0; -fx-border-color: transparent; -fx-background-color: transparent;" />
 
       <!-- Customer Login Button -->
-      <Button fx:id="customerLoginButton" layoutX="349.0" layoutY="273.0" mnemonicParsing="false" onAction="#handleCustomerLogin" prefHeight="48.0" prefWidth="102.0" style="-fx-padding: 0; -fx-border-color: transparent; -fx-background-color: transparent;">
-         <graphic>
-            <ImageView fitHeight="125.0" fitWidth="126.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../pngs/customer_login.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
+      <Button fx:id="customerLoginButton" layoutX="153.0" layoutY="319.0" mnemonicParsing="false" onAction="#handleCustomerLogin" prefHeight="26.0" prefWidth="93.0" style="-fx-padding: 0; -fx-border-color: transparent; -fx-background-color: transparent;" />
    </children>
 </AnchorPane>

@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -24,11 +25,17 @@ public class CustomerLoginController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        System.out.println("Attempting login with:");
-        System.out.println("Username: " + username);
-        System.out.println("Password: " + password);
+        if (username.isEmpty() || password.isEmpty()) {
+            showAlert("Missing Information", "Please enter both username and password.");
+            return;
+        }
 
-        // TODO: Add your database check or redirect here
+        // Example validation (replace with database logic later)
+        if (username.equals("staff") && password.equals("1234")) {
+            showAlert("Login Successful", "Welcome, " + username + "!");
+        } else {
+            showAlert("Login Failed", "Invalid username or password.");
+        }
     }
 
     @FXML
@@ -55,5 +62,18 @@ public class CustomerLoginController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void handleSignUp(ActionEvent event) {
+
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

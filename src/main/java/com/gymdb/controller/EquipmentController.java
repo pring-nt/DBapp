@@ -27,7 +27,15 @@ public class EquipmentController {
 
     @FXML
     private void handleList(ActionEvent event) {
-
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/ShowEquipment.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -46,7 +54,15 @@ public class EquipmentController {
 
     @FXML
     private void handleRemove(ActionEvent event) {
-
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/RemoveEquipments.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -65,6 +81,5 @@ public class EquipmentController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }

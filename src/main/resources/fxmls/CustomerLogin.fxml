@@ -23,5 +23,6 @@
       <Button fx:id="adminLogin" layoutX="160.0" layoutY="320.0" mnemonicParsing="false" onAction="#handleAdmin" opacity="0.0" prefHeight="20.0" prefWidth="82.0" />
 
       <Button fx:id="staffLogin" layoutX="373.0" layoutY="320.0" mnemonicParsing="false" onAction="#handleStaff" opacity="0.0" prefHeight="20.0" prefWidth="82.0" />
+      <Button fx:id="signUp" layoutX="266.0" layoutY="320.0" mnemonicParsing="false" onAction="#handleSignUp" opacity="0.0" prefHeight="20.0" prefWidth="82.0" />
    </children>
 </AnchorPane>
