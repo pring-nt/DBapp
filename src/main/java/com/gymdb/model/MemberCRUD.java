@@ -10,10 +10,10 @@ public class MemberCRUD {
 
     public boolean addRecord(Member m) {
         String sql =
-                    "INSERT INTO Member (first_name, last_name, email, contact_no, membership_type," +
-                    "start_date, end_date, health_goal, initial_weight, goal_weight," +
-                    "start_bmi, updated_bmi, classID, trainerID, lockerID)" +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "INSERT INTO Member (first_name, last_name, email, contact_no, membership_type, " +
+                    "start_date, end_date, health_goal, initial_weight, goal_weight, " +
+                    "start_bmi, updated_bmi, classID, trainerID, lockerID) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -37,7 +37,7 @@ public class MemberCRUD {
             return true;
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
     }
@@ -72,7 +72,7 @@ public class MemberCRUD {
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
         return list;
     }
@@ -106,17 +106,17 @@ public class MemberCRUD {
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
         return null;
     }
 
     public boolean modRecord(Member m) {
         String sql =
-                "UPDATE Member" +
-                "SET first_name=?, last_name=?, email=?, contact_no=?, membership_type=?," +
-                "start_date=?, end_date=?, health_goal=?, initial_weight=?, goal_weight=?," +
-                "start_bmi=?, updated_bmi=?, classID=?, trainerID=?, lockerID=?" +
+                "UPDATE Member " +
+                "SET first_name=?, last_name=?, email=?, contact_no=?, membership_type=?, " +
+                "start_date=?, end_date=?, health_goal=?, initial_weight=?, goal_weight=?, " +
+                "start_bmi=?, updated_bmi=?, classID=?, trainerID=?, lockerID=? " +
                 "WHERE memberID=?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -142,7 +142,7 @@ public class MemberCRUD {
             return true;
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
     }
@@ -155,7 +155,7 @@ public class MemberCRUD {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
     }

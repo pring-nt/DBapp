@@ -22,7 +22,7 @@ public class PaymentCRUD {
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return false;
         }
     }
@@ -47,7 +47,7 @@ public class PaymentCRUD {
                 ));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
         return list;
     }
@@ -73,7 +73,7 @@ public class PaymentCRUD {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
         return null;
     }
@@ -94,7 +94,7 @@ public class PaymentCRUD {
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return false;
         }
     }
@@ -108,7 +108,7 @@ public class PaymentCRUD {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return false;
         }
     }

@@ -20,7 +20,7 @@ public class PurchaseCRUD {
             return true;
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
     }
@@ -48,7 +48,7 @@ public class PurchaseCRUD {
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
 
         return list;
@@ -76,7 +76,7 @@ public class PurchaseCRUD {
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
 
         return null;
@@ -95,7 +95,7 @@ public class PurchaseCRUD {
             return true;
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
     }
@@ -110,7 +110,7 @@ public class PurchaseCRUD {
             return true;
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
     }
