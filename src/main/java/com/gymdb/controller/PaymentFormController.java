@@ -68,7 +68,6 @@ public class PaymentFormController {
     }
 
     // Called when the "Back" button is pressed
-
     @FXML
     private void handleBack(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/fxmls/MainMenu.fxml"));
@@ -76,6 +75,7 @@ public class PaymentFormController {
         stage.setScene(new Scene(root));
         stage.show();
     }
+
     // Utility method for showing alerts
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
