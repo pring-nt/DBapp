@@ -123,8 +123,7 @@ CREATE TABLE Equipment (
     unit_price DECIMAL(10, 2) NOT NULL,
     vendor VARCHAR(100) NOT NULL,
     contact_no VARCHAR(20) NOT NULL,
-    purchase_date DATETIME NOT NULL,
-    INDEX idx_equipment_name (equipment_name)
+    purchase_date DATETIME NOT NULL
 );
 
 -- Re-enable FK checks
