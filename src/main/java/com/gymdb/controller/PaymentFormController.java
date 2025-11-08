@@ -1,47 +1,96 @@
 package com.gymdb.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class PaymentFormController {
-
-    @FXML
-    private Button makepaymentBtn;
 
     @FXML
     private TextField fullName;
 
     @FXML
-    private TextField fullName1;
-
-    @FXML
-    private TextField fullName11;
-
-    @FXML
-    private TextField fullName111;
+    private TextField service;
 
     @FXML
     private TextField amountPerMonth;
 
     @FXML
-    private void makePayment() {
-        // Example: retrieve field values
-        String name = fullName.getText();
-        String field1 = fullName1.getText();
-        String field2 = fullName11.getText();
-        String field3 = fullName111.getText();
-        String amount = amountPerMonth.getText();
+    private TextField plan;
 
-        // For now, just print them
-        System.out.println("=== Payment Form Data ===");
-        System.out.println("Full Name: " + name);
-        System.out.println("Field 1: " + field1);
-        System.out.println("Field 2: " + field2);
-        System.out.println("Field 3: " + field3);
-        System.out.println("Amount per month: " + amount);
+    @FXML
+    private TextField memberStatus;
 
-        // TODO: Add your actual payment logic here
+    @FXML
+    private Button makepaymentBtn;
+
+    @FXML
+    private Button backBtn;
+
+    // Called when the "Make Payment" button is pressed
+    @FXML
+    private void makePayment(ActionEvent event) {
+        String name = fullName.getText().trim();
+        String selectedService = service.getText().trim();
+        String amount = amountPerMonth.getText().trim();
+        String selectedPlan = plan.getText().trim();
+        String status = memberStatus.getText().trim();
+
+        // Simple validation
+        if (name.isEmpty() || selectedService.isEmpty() || amount.isEmpty() || selectedPlan.isEmpty() || status.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Missing Information", "Please fill out all fields before making payment.");
+            return;
+        }
+
+        // (Optional) Validate that amount is numeric
+        try {
+            Double.parseDouble(amount);
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Amount", "Please enter a valid numeric amount.");
+            return;
+        }
+
+        // Simulate a successful payment
+        showAlert(Alert.AlertType.INFORMATION, "Payment Successful",
+                "Payment has been successfully processed for " + name + " (" + selectedPlan + " Plan).");
+
+        // Clear fields after payment
+        clearFields();
+    }
+
+    // Called when the "Back" button is pressed
+
+    @FXML
+    private void handleBack(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/MainMenu.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+    // Utility method for showing alerts
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    // Clears all text fields
+    private void clearFields() {
+        fullName.clear();
+        service.clear();
+        amountPerMonth.clear();
+        plan.clear();
+        memberStatus.clear();
     }
 }
-
