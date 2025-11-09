@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gymdb.controller.AddEquipmentController">
+    <children>
+      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../pngs/locker_bg.png" />
+         </image>
+      </ImageView>
+      <Button mnemonicParsing="false" text="Button" />
+      <Button fx:id="one" layoutX="26.0" layoutY="125.0" mnemonicParsing="false" opacity="0.0" prefHeight="52.0" prefWidth="52.0" text="Button" />
+      <Button fx:id="two" layoutX="129.0" layoutY="125.0" mnemonicParsing="false" opacity="0.0" prefHeight="52.0" prefWidth="52.0" text="Button" />
+      <Button fx:id="three" layoutX="229.0" layoutY="125.0" mnemonicParsing="false" opacity="0.0" prefHeight="52.0" prefWidth="52.0" text="Button" />
+      <Button fx:id="four" layoutX="325.0" layoutY="125.0" mnemonicParsing="false" opacity="0.0" prefHeight="52.0" prefWidth="52.0" text="Button" />
+      <Button fx:id="five" layoutX="425.0" layoutY="125.0" mnemonicParsing="false" opacity="0.0" prefHeight="52.0" prefWidth="52.0" text="Button" />
+      <Button fx:id="sex" layoutX="520.0" layoutY="125.0" mnemonicParsing="false" opacity="0.0" prefHeight="52.0" prefWidth="52.0" text="Button" />
+      <Button fx:id="seven" layoutX="26.0" layoutY="193.0" mnemonicParsing="false" opacity="0.0" prefHeight="52.0" prefWidth="52.0" text="Button" />
+      <Button fx:id="eight" layoutX="129.0" layoutY="200.0" mnemonicParsing="false" opacity="0.0" prefHeight="52.0" prefWidth="52.0" text="Button" />
+      <Button fx:id="nine" layoutX="229.0" layoutY="200.0" mnemonicParsing="false" opacity="0.0" prefHeight="52.0" prefWidth="52.0" text="Button" />
+      <Button fx:id="ten" layoutX="325.0" layoutY="200.0" mnemonicParsing="false" opacity="0.0" prefHeight="52.0" prefWidth="52.0" text="Button" />
+      <Button fx:id="eleven" layoutX="425.0" layoutY="198.0" mnemonicParsing="false" opacity="0.0" prefHeight="52.0" prefWidth="52.0" text="Button" />
+      <Button fx:id="twelve" layoutX="520.0" layoutY="200.0" mnemonicParsing="false" opacity="0.0" prefHeight="52.0" prefWidth="52.0" text="Button" />
+      <Button fx:id="eighteen" layoutX="526.0" layoutY="268.0" mnemonicParsing="false" opacity="0.0" prefHeight="52.0" prefWidth="52.0" text="Button" />
+      <Button fx:id="seventeen" layoutX="425.0" layoutY="268.0" mnemonicParsing="false" opacity="0.0" prefHeight="52.0" prefWidth="52.0" text="button" />
+      <Button fx:id="sixteen" layoutX="325.0" layoutY="268.0" mnemonicParsing="false" opacity="0.0" prefHeight="52.0" prefWidth="52.0" text="Button" />
+      <Button fx:id="fifteen" layoutX="229.0" layoutY="268.0" mnemonicParsing="false" opacity="0.0" prefHeight="52.0" prefWidth="52.0" text="Button" />
+      <Button fx:id="forten" layoutX="135.0" layoutY="268.0" mnemonicParsing="false" opacity="0.0" prefHeight="52.0" prefWidth="52.0" text="Button" />
+      <Button fx:id="thirteen" layoutX="32.0" layoutY="268.0" mnemonicParsing="false" opacity="0.0" prefHeight="52.0" prefWidth="52.0" text="Button" />
+      <Button fx:id="backBtn" layoutX="203.0" layoutY="353.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="37.0" prefWidth="192.0" text="Button" />
+   </children>
+</AnchorPane>
