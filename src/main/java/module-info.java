@@ -2,6 +2,7 @@ module com.example.dbapp {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires javafx.graphics;
 
     opens com.gymdb.model to javafx.fxml;
 

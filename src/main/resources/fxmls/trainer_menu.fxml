@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gymdb.controller.TrainerMenuController">
+   <children>
+      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../pngs/trainer_menu.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="btnBack" layoutX="228.0" layoutY="345.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="25.0" prefWidth="145.0" text="Button" />
+      <Button fx:id="btnListTrainers" layoutX="49.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleListTrainers" opacity="0.0" prefHeight="97.0" prefWidth="110.0" text="Button" />
+      <Button fx:id="btnEntryForm" layoutX="180.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleEntry" opacity="0.0" prefHeight="97.0" prefWidth="110.0" text="Button" />
+      <Button fx:id="btnRemove" layoutX="312.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleRemove" opacity="0.0" prefHeight="97.0" prefWidth="110.0" text="Button" />
+      <Button fx:id="btnUpdate" layoutX="444.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleUpdate" opacity="0.0" prefHeight="97.0" prefWidth="110.0" text="Button" />
+   </children>
+</AnchorPane>

@@ -1,15 +1,14 @@
 package com.gymdb.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record Equipment(
-        int id,
-        String name,
-        String description,
+        int equipmentID,
+        String equipmentName,
+        String equipmentDescription,
         int quantity,
-        double amount,
+        double unitPrice,
         String vendor,
-        String contact,
-        LocalDate purchaseDate
+        String contactNo,
+        LocalDateTime purchaseDate
 ) {}
-

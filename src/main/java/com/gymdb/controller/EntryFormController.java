@@ -20,7 +20,7 @@ public class EntryFormController {
     @FXML private TextField txtLastName;
     @FXML private TextField txtEmail;
     @FXML private TextField txtContact;
-    @FXML private TextField txtMembership;
+    @FXML private ComboBox<String> cmbMembership;
     @FXML private TextField txtHealthGoal;
     @FXML private TextField txtInitialWeight;
     @FXML private TextField txtGoalWeight;
@@ -35,7 +35,7 @@ public class EntryFormController {
             String lastName = txtLastName.getText();
             String email = txtEmail.getText();
             String contactNo = txtContact.getText();
-            String membershipType = txtMembership.getText();
+            String membershipType = cmbMembership.getValue();
             String healthGoal = txtHealthGoal.getText();
             LocalDate startDate = dpStartDate.getValue();
             LocalDate endDate = dpEndDate.getValue();
@@ -95,7 +95,7 @@ public class EntryFormController {
         txtLastName.clear();
         txtEmail.clear();
         txtContact.clear();
-        txtMembership.clear();
+        cmbMembership.getSelectionModel().clearSelection();
         txtHealthGoal.clear();
         txtInitialWeight.clear();
         txtGoalWeight.clear();
