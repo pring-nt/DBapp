@@ -1,11 +1,9 @@
 package com.gymdb.controller;
 
-import com.gymdb.model.Attendance;
-import com.gymdb.model.AttendanceCRUD;
 import com.gymdb.model.Member;
 import com.gymdb.model.MemberCRUD;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.ReadOnlyStringWrapper;
+import com.gymdb.services.ClassAttendance;
+import com.gymdb.services.ClassAttendanceService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+import javafx.beans.property.ReadOnlyStringWrapper;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -26,49 +25,58 @@ import java.util.stream.Collectors;
 
 public class AttendanceViewController {
 
-    @FXML private TableView<Attendance> attendanceTable;
-    @FXML private TableColumn<Attendance, Integer> colId;
-    @FXML private TableColumn<Attendance, String> colDatetime;
-    @FXML private TableColumn<Attendance, String> colMember;
-    @FXML private TableColumn<Attendance, String> colClass;
+    @FXML private TableView<ClassAttendance> attendanceTable;
+    @FXML private TableColumn<ClassAttendance, Integer> colId;
+    @FXML private TableColumn<ClassAttendance, String> colDatetime;
+    @FXML private TableColumn<ClassAttendance, String> colMember;
+    @FXML private TableColumn<ClassAttendance, String> colClassType;
 
-    private final AttendanceCRUD attendanceCrud = new AttendanceCRUD();
     private final MemberCRUD memberCrud = new MemberCRUD();
-    private final ObservableList<Attendance> data = FXCollections.observableArrayList();
+
+    // cache memberID -> "First Last" for fast lookup
     private Map<Integer, String> memberNames;
 
     private final DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @FXML
-    private void initialize() {
-        // Preload member names to display
-        List<Member> allMembers = memberCrud.getAllRecords();
-        memberNames = allMembers.stream()
+    public void initialize() {
+        // prepare member lookup map
+        List<Member> members = memberCrud.getAllRecords();
+        memberNames = members.stream()
                 .collect(Collectors.toMap(Member::memberID,
-                        m -> ((m.firstName()==null?"":m.firstName()) + " " + (m.lastName()==null?"":m.lastName())).trim()));
+                        m -> ((m.firstName()==null ? "" : m.firstName()) + " " + (m.lastName()==null ? "" : m.lastName())).trim()));
 
-        // Column factories
-        colId.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(c.getValue().attendanceID()));
-        colDatetime.setCellValueFactory(c -> new ReadOnlyStringWrapper(
-                c.getValue().datetime() == null ? "" : c.getValue().datetime().format(fmt)));
-        colMember.setCellValueFactory(c -> new ReadOnlyStringWrapper(
-                memberNames.getOrDefault(c.getValue().memberID(), "ID:" + c.getValue().memberID())));
-        colClass.setCellValueFactory(c -> new ReadOnlyStringWrapper(
-                String.valueOf(c.getValue().classID())));
+        // wire columns
+        colId.setCellValueFactory(cell -> new javafx.beans.property.ReadOnlyObjectWrapper<>(cell.getValue().attendanceID()));
 
-        // Load records
+        colDatetime.setCellValueFactory(cell -> {
+            var dt = cell.getValue().attendanceDateTime();
+            String s = (dt == null) ? "" : fmt.format(dt);
+            return new ReadOnlyStringWrapper(s);
+        });
+
+        colMember.setCellValueFactory(cell -> {
+            int memberId = cell.getValue().memberID();
+            String name = memberNames.getOrDefault(memberId, "ID:" + memberId);
+            return new ReadOnlyStringWrapper(name);
+        });
+
+        colClassType.setCellValueFactory(cell ->
+                new ReadOnlyStringWrapper(cell.getValue().classType() == null ? "" : cell.getValue().classType())
+        );
+
         loadAttendance();
     }
 
     private void loadAttendance() {
-        List<Attendance> list = attendanceCrud.getAllRecords();
-        data.setAll(list);
+        List<ClassAttendance> list = ClassAttendanceService.getClassAttendances();
+        ObservableList<ClassAttendance> data = FXCollections.observableArrayList(list);
         attendanceTable.setItems(data);
     }
 
     @FXML
     private void handleBack(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/AttendanceMenu.fxml")); // adjust path
+        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/AttendanceMenu.fxml")); // adjust path if different
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();

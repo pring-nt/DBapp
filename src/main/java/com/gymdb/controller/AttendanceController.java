@@ -2,8 +2,6 @@ package com.gymdb.controller;
 
 import com.gymdb.model.Attendance;
 import com.gymdb.model.AttendanceCRUD;
-import com.gymdb.model.GymClass;
-import com.gymdb.model.GymClassCRUD;
 import com.gymdb.model.Member;
 import com.gymdb.model.MemberCRUD;
 import javafx.application.Platform;
@@ -23,7 +21,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class AttendanceController {
 
@@ -33,13 +30,11 @@ public class AttendanceController {
     @FXML private Button btnBack;
 
     private final MemberCRUD memberCrud = new MemberCRUD();
-    private final GymClassCRUD classCrud = new GymClassCRUD();
     private final AttendanceCRUD attendanceCrud = new AttendanceCRUD();
 
     private final ObservableList<Member> members = FXCollections.observableArrayList();
 
-    // after user picks a class type and class name popup, this will hold resolved classID (>0),
-    // or 0 to indicate "no class", or -1 on failure.
+    // selectedClassId will hold the fixed mapping ID (1-4) or 0 if none chosen
     private int selectedClassId = 0;
     private String selectedClassName = null;
     private String selectedClassType = null;
@@ -112,11 +107,11 @@ public class AttendanceController {
         }
 
         String className = opt.get();
-        // resolve classID: find existing or create it
-        int cid = findOrCreateClassId(classType, className);
+
+        // **MAP class type to fixed IDs (Option 2)**
+        int cid = mapClassTypeToId(classType);
         if (cid <= 0) {
-            // failed to create/find class — show error and clear selection
-            Alert err = new Alert(Alert.AlertType.ERROR, "Failed to locate or create class '" + className + "'.");
+            Alert err = new Alert(Alert.AlertType.ERROR, "Invalid class type mapping.");
             err.setHeaderText(null);
             err.showAndWait();
             clearSelectedClass();
@@ -128,46 +123,24 @@ public class AttendanceController {
         selectedClassId = cid;
         selectedClassName = className;
         selectedClassType = classType;
-        // optionally show small confirmation
-        Tooltip t = new Tooltip("Selected: " + className + " (" + classType + ")");
-        // (can't attach a Tooltip to ComboBox directly via code easily here; instead show information box)
+
         Alert info = new Alert(Alert.AlertType.INFORMATION, "Selected class: " + className + " (" + classType + ")");
         info.setHeaderText(null);
         info.showAndWait();
     }
 
     /**
-     * Find a GymClass with the given type+name. If not found, try to insert it (GymClassCRUD.addRecord)
-     * and then re-query to find the new record and return its classID.
-     * Returns:
-     *  - classID (>0) on success
-     *  - -1 on failure
+     * Fixed mapping: Yoga=1, Strength Training=2, HIIT=3, Zumba=4
      */
-    private int findOrCreateClassId(String classType, String className) {
-        try {
-            List<GymClass> all = classCrud.getAllRecords();
-            Optional<GymClass> found = all.stream()
-                    .filter(g -> g.classType() != null && g.classType().equalsIgnoreCase(classType)
-                            && g.className() != null && g.className().equalsIgnoreCase(className))
-                    .findFirst();
-            if (found.isPresent()) return found.get().classID();
-
-            // not found -> create a new class record with null date/time and no personnel
-            GymClass newClass = new GymClass(0, className, classType, null, null, null, null);
-            boolean added = classCrud.addRecord(newClass);
-            if (!added) return -1;
-
-            // re-query to find the inserted record (matching name+type)
-            all = classCrud.getAllRecords();
-            Optional<GymClass> created = all.stream()
-                    .filter(g -> g.classType() != null && g.classType().equalsIgnoreCase(classType)
-                            && g.className() != null && g.className().equalsIgnoreCase(className))
-                    .findFirst();
-            return created.map(GymClass::classID).orElse(-1);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
-        }
+    private int mapClassTypeToId(String type) {
+        if (type == null) return 0;
+        return switch (type) {
+            case "Yoga" -> 1;
+            case "Strength Training" -> 2;
+            case "HIIT" -> 3;
+            case "Zumba" -> 4;
+            default -> 0;
+        };
     }
 
     @FXML
@@ -178,8 +151,7 @@ public class AttendanceController {
             return;
         }
 
-        // selectedClassId contains the resolved class id chosen earlier, or 0 if none
-        // If user didn't pick a className yet (selectedClassId==0), confirm with user to proceed without class
+        // if no class chosen (selectedClassId==0), ask if they want to proceed without class
         if (selectedClassId == 0) {
             Alert a = new Alert(Alert.AlertType.CONFIRMATION,
                     "No class selected. Record attendance without a class?");
@@ -228,3 +200,4 @@ public class AttendanceController {
         stage.show();
     }
 }
+
