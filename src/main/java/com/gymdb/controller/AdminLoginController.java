@@ -50,7 +50,15 @@ public class AdminLoginController {
         // Check for default admin login first
         if (username.equals("admin") && password.equals("ccinfom124!")) {
             showAlert("Success", "Admin login successful! Welcome " + username + ".");
-            // TODO: load admin dashboard here
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/MainMenu.fxml"));
+                Parent root = loader.load();
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return;
         }
 
