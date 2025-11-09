@@ -95,14 +95,22 @@ public class LockerCRUD {
                 stmt.setNull(3, Types.DATE);
 
             stmt.setInt(4, locker.lockerID());
-            stmt.executeUpdate();
-            return true;
+
+            int rowsUpdated = stmt.executeUpdate(); // <-- check rows affected
+            if (rowsUpdated > 0) {
+                System.out.println("Locker " + locker.lockerID() + " updated successfully.");
+                return true;
+            } else {
+                System.err.println("No locker found with ID " + locker.lockerID());
+                return false;
+            }
 
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Error updating locker: " + e.getMessage());
             return false;
         }
     }
+
 
     public boolean delRecord(int id) {
         String sql = "DELETE FROM Locker WHERE lockerID = ?";

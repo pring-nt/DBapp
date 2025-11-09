@@ -11,7 +11,7 @@ public class ProductInventoryLauncher extends Application {
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/ProductInventory.fxml"));
         Scene scene = new Scene(loader.load());
-        primaryStage.setTitle("Customer Login");
+        primaryStage.setTitle("Product Inventory");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

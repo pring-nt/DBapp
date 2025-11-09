@@ -5,12 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class AddEquipmentLauncher extends Application {
-    @Override
+public class ClassLauncher extends Application {
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/AddEquipment.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/Class.fxml"));
         Scene scene = new Scene(loader.load());
-        primaryStage.setTitle("Add Equipment");
+        primaryStage.setTitle("Customer Login");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

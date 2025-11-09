@@ -143,4 +143,18 @@ public class AttendanceCRUD {
 
     }
 
+    public int countByClassID(int classID) {
+        String sql = "SELECT COUNT(*) FROM Attendance WHERE classID = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, classID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            System.err.println("countByClassID error: " + e.getMessage());
+        }
+        return 0;
+    }
+
+
 }
