@@ -4,13 +4,17 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.Parent;
 
-public class AddEquipmentLauncher extends Application {
+public class TrainerMenuLauncher extends Application {
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/AddEquipment.fxml"));
-        Scene scene = new Scene(loader.load());
-        primaryStage.setTitle("Customer Login");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/trainer_menu.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+
+        primaryStage.setTitle("Reps and Records");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
