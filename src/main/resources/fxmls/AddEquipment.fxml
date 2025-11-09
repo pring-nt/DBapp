@@ -6,13 +6,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane
-        fx:controller="com.gymdb.controller.AddEquipmentController"
-        maxHeight="-Infinity" maxWidth="-Infinity"
-        minHeight="-Infinity" minWidth="-Infinity"
-        prefHeight="400.0" prefWidth="600.0"
-        xmlns="http://javafx.com/javafx/24.0.1"
-        xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gymdb.controller.AddEquipmentController">
 
    <children>
       <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
@@ -21,18 +15,16 @@
          </image>
       </ImageView>
 
-      <TextField fx:id="equipment_info" layoutX="130.0" layoutY="133.0" prefHeight="26.0" prefWidth="145.0" promptText="Name" />
-      <TextField fx:id="description_info" layoutX="130.0" layoutY="180.0" prefHeight="26.0" prefWidth="145.0" promptText="Description" />
-      <TextField fx:id="quantity_info" layoutX="130.0" layoutY="222.0" prefHeight="26.0" prefWidth="145.0" promptText="Quantity" />
-      <TextField fx:id="dop_info" layoutX="133.0" layoutY="266.0" prefHeight="26.0" prefWidth="142.0" promptText="Purchase Date (YYYY-MM-DD)" />
-      <TextField fx:id="vendo_info" layoutX="370.0" layoutY="133.0" prefHeight="26.0" prefWidth="154.0" promptText="Vendor" />
-      <TextField fx:id="address_info" layoutX="369.0" layoutY="180.0" prefHeight="26.0" prefWidth="154.0" promptText="Address" />
-      <TextField fx:id="contact_info" layoutX="404.0" layoutY="222.0" prefHeight="26.0" prefWidth="140.0" promptText="Contact" />
-      <TextField fx:id="cpi_info" layoutX="391.0" layoutY="305.0" prefHeight="26.0" prefWidth="140.0" promptText="Amount" />
+      <TextField fx:id="equipment_info" layoutX="130.0" layoutY="129.0" prefHeight="26.0" prefWidth="145.0" promptText="Name" />
+      <TextField fx:id="description_info" layoutX="129.0" layoutY="172.0" prefHeight="26.0" prefWidth="145.0" promptText="Description" />
+      <TextField fx:id="quantity_info" layoutX="130.0" layoutY="217.0" prefHeight="26.0" prefWidth="145.0" promptText="Quantity" />
+      <TextField fx:id="dop_info" layoutX="130.0" layoutY="261.0" prefHeight="26.0" prefWidth="142.0" promptText="(YYYY-MM-DD)" />
+      <TextField fx:id="vendo_info" layoutX="370.0" layoutY="131.0" prefHeight="26.0" prefWidth="154.0" promptText="Vendor" />
+      <TextField fx:id="address_info" layoutX="370.0" layoutY="172.0" prefHeight="26.0" prefWidth="154.0" promptText="Address" />
+      <TextField fx:id="contact_info" layoutX="404.0" layoutY="216.0" prefHeight="26.0" prefWidth="140.0" promptText="Contact Number" />
+      <TextField fx:id="cpi_info" layoutX="391.0" layoutY="299.0" prefHeight="26.0" prefWidth="140.0" promptText="Amount" />
 
-      <Button fx:id="backBtn" layoutX="168.0" layoutY="343.0" mnemonicParsing="false" opacity="0.0"
-              prefHeight="33.0" prefWidth="107.0" onAction="#handleBack" />
-      <Button fx:id="saveBtn" layoutX="317.0" layoutY="343.0" mnemonicParsing="false" opacity="0.0"
-              prefHeight="33.0" prefWidth="107.0" onAction="#handleSave" />
+      <Button fx:id="backBtn" layoutX="168.0" layoutY="343.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="33.0" prefWidth="107.0" />
+      <Button fx:id="saveBtn" layoutX="317.0" layoutY="343.0" mnemonicParsing="false" onAction="#handleSave" opacity="0.0" prefHeight="33.0" prefWidth="107.0" />
    </children>
 </AnchorPane>

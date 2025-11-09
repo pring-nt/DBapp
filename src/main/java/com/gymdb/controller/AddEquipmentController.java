@@ -1,5 +1,6 @@
 package com.gymdb.controller;
 
+import com.gymdb.model.Equipment;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,57 +13,63 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
-import com.gymdb.utils.DBConnection;
+import java.time.LocalDateTime;
 
 public class AddEquipmentController {
 
     @FXML private TextField equipment_info;
     @FXML private TextField description_info;
     @FXML private TextField quantity_info;
-    @FXML private TextField dop_info;
-    @FXML private TextField vendo_info;
-    @FXML private TextField address_info;
-    @FXML private TextField contact_info;
     @FXML private TextField cpi_info;
+    @FXML private TextField vendo_info;
+    @FXML private TextField contact_info;
     @FXML private Button saveBtn;
     @FXML private Button backBtn;
 
     @FXML
-    private void handleSave(ActionEvent event) {
-        String query = "INSERT INTO equipment (equipment_name, description, quantity, amount, vendor_name, contact_number, purchase_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private void handleSave(ActionEvent event) throws IOException {
+        try {
+            String name = equipment_info.getText();
+            String desc = description_info.getText();
+            int qty = Integer.parseInt(quantity_info.getText());
+            double price = Double.parseDouble(cpi_info.getText());
+            String vendor = vendo_info.getText();
+            String contact = contact_info.getText();
+            LocalDateTime purchaseDate = LocalDateTime.now();
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+            Equipment newEquipment = new Equipment(0, name, desc, qty, price, vendor, contact, purchaseDate);
 
-            stmt.setString(1, equipment_info.getText());
-            stmt.setString(2, description_info.getText());
-            stmt.setInt(3, Integer.parseInt(quantity_info.getText()));
-            stmt.setDouble(4, Double.parseDouble(cpi_info.getText()));
-            stmt.setString(5, vendo_info.getText());
-            stmt.setString(6, contact_info.getText());
-            stmt.setString(7, dop_info.getText());
+            // Open ShowEquipment window and add new equipment dynamically
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/ShowEquipment.fxml"));
+            Parent root = loader.load();
 
-            stmt.executeUpdate();
-            showAlert(Alert.AlertType.INFORMATION, "Success", "Equipment added successfully!");
-            clearFields();
+            ShowEquipmentController controller = loader.getController();
+            controller.addNewEquipment(newEquipment);
 
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Database Error", e.getMessage());
+            Stage stage = new Stage();
+            stage.setTitle("Equipment List");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            // Close AddEquipment window
+            ((Stage) saveBtn.getScene().getWindow()).close();
+
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Input Error", "Please enter valid numbers for quantity and amount.");
+            showAlert(Alert.AlertType.ERROR, "Input Error", "Please enter valid numbers for quantity and price.");
         }
     }
 
     @FXML
     private void handleBack(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/Equipment.fxml"));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/Equipment.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showAlert(Alert.AlertType type, String title, String content) {
@@ -71,16 +78,5 @@ public class AddEquipmentController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
-    }
-
-    private void clearFields() {
-        equipment_info.clear();
-        description_info.clear();
-        quantity_info.clear();
-        dop_info.clear();
-        vendo_info.clear();
-        address_info.clear();
-        contact_info.clear();
-        cpi_info.clear();
     }
 }
