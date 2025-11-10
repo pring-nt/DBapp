@@ -1,179 +1,168 @@
 package com.gymdb.controller;
 
+import com.gymdb.model.Member;
+import com.gymdb.model.MemberCRUD;
 import com.gymdb.utils.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Region;
 import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
+import javafx.util.StringConverter;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.Node;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.Region;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MembersReportController {
 
-    @FXML private TableView<SummaryRow> tblSummary;
-    @FXML private TableColumn<SummaryRow, Integer> colTotalMembers;
-    @FXML private TableColumn<SummaryRow, String>  colPlanDist;
-    @FXML private TableColumn<SummaryRow, String>  colTopServices;
-    @FXML private TableColumn<SummaryRow, String>  colExpired;
+    @FXML private ComboBox<Member> cmbMembers;
     @FXML private Button btnBack;
 
-    private final ObservableList<SummaryRow> rows = FXCollections.observableArrayList();
+    private final MemberCRUD memberCrud = new MemberCRUD();
 
     @FXML
     public void initialize() {
-        // wire columns
-        colTotalMembers.setCellValueFactory(new PropertyValueFactory<>("totalMembers"));
-        colPlanDist.setCellValueFactory(new PropertyValueFactory<>("planDist"));
-        colTopServices.setCellValueFactory(new PropertyValueFactory<>("topServices"));
-        colExpired.setCellValueFactory(new PropertyValueFactory<>("expired"));
+        // load members from DB
+        try {
+            List<Member> list = memberCrud.getAllRecords();
+            ObservableList<Member> obs = FXCollections.observableArrayList(list);
+            cmbMembers.setItems(obs);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            cmbMembers.setItems(FXCollections.observableArrayList());
+        }
 
-        // enable text wrap for long String columns
-        setWrapCellFactory(colPlanDist);
-        setWrapCellFactory(colTopServices);
-        setWrapCellFactory(colExpired);
+        // show "First Last (ID:#)" in combo box
+        cmbMembers.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Member m) {
+                if (m == null) return "";
+                String fn = m.firstName() == null ? "" : m.firstName();
+                String ln = m.lastName() == null ? "" : m.lastName();
+                return (fn + " " + ln).trim() + " (ID: " + m.memberID() + ")";
+            }
+            @Override
+            public Member fromString(String s) { return null; }
+        });
 
-        tblSummary.setItems(rows);
+        cmbMembers.setPromptText("Select a member");
 
-        // load data now
-        loadSummaryRow();
-    }
-
-    private void setWrapCellFactory(TableColumn<SummaryRow, String> col) {
-        col.setCellFactory(tc -> {
-            TableCell<SummaryRow, String> cell = new TableCell<>() {
-                private final TextArea ta = new TextArea();
-                {
-                    ta.setWrapText(true);
-                    ta.setEditable(false);
-                    ta.setPrefRowCount(3);
-                    ta.setPrefWidth(col.getPrefWidth());
-                    ta.setStyle("-fx-background-color:transparent; -fx-control-inner-background: transparent;");
-                }
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setGraphic(null);
-                    } else {
-                        ta.setText(item);
-                        ta.setMinHeight(Region.USE_PREF_SIZE);
-                        setGraphic(ta);
-                    }
-                }
-            };
-            return cell;
+        // when a member is selected, show the popup
+        cmbMembers.setOnAction(evt -> {
+            Member selected = cmbMembers.getValue();
+            if (selected != null) {
+                showMemberPopup(selected);
+            }
         });
     }
 
-    private void loadSummaryRow() {
-        int totalMembers = 0;
-        String planDist = "";
-        String topServices = "";
-        String expired = "";
+    private void showMemberPopup(Member m) {
+        int memberId = m.memberID();
+
+        // membership type from Member record
+        String membershipType = m.membershipType() == null ? "N/A" : m.membershipType();
+
+        // total paid
+        double totalPaid = 0.0;
+        // total attendance count
+        int attendanceCount = 0;
+        // classes by classType => count (preserve order by count desc using LinkedHashMap later)
+        Map<String, Integer> classesByType = new LinkedHashMap<>();
 
         try (Connection conn = DBConnection.getConnection()) {
-            // total members
-            try (PreparedStatement p = conn.prepareStatement("SELECT COUNT(*) FROM Member")) {
-                ResultSet rs = p.executeQuery();
-                if (rs.next()) totalMembers = rs.getInt(1);
-            }
-
-            // membership plan distribution: membership_type -> count
+            // total paid
             try (PreparedStatement p = conn.prepareStatement(
-                    "SELECT membership_type, COUNT(*) AS cnt FROM Member GROUP BY membership_type")) {
-                ResultSet rs = p.executeQuery();
-                List<String> parts = new ArrayList<>();
-                while (rs.next()) {
-                    String plan = rs.getString("membership_type");
-                    int cnt = rs.getInt("cnt");
-                    parts.add((plan == null ? "Unknown" : plan) + ": " + cnt);
+                    "SELECT IFNULL(SUM(amount),0) FROM Payment WHERE memberID = ?")) {
+                p.setInt(1, memberId);
+                try (ResultSet rs = p.executeQuery()) {
+                    if (rs.next()) totalPaid = rs.getDouble(1);
                 }
-                planDist = String.join("\n", parts);
             }
 
-            // top "services" chosen: we use Member.classID joined with Class.className
-            // if Class table missing entries, those members will be skipped here
+            // attendance total
             try (PreparedStatement p = conn.prepareStatement(
-                    "SELECT c.className AS name, COUNT(*) AS cnt " +
-                            "FROM Member m JOIN Class c ON m.classID = c.classID " +
-                            "GROUP BY c.className " +
-                            "ORDER BY cnt DESC " +
-                            "LIMIT 5")) {
-                ResultSet rs = p.executeQuery();
-                List<String> parts = new ArrayList<>();
-                while (rs.next()) {
-                    String name = rs.getString("name");
-                    int cnt = rs.getInt("cnt");
-                    parts.add((name == null ? "Unknown" : name) + " (" + cnt + ")");
+                    "SELECT COUNT(*) FROM Attendance WHERE memberID = ?")) {
+                p.setInt(1, memberId);
+                try (ResultSet rs = p.executeQuery()) {
+                    if (rs.next()) attendanceCount = rs.getInt(1);
                 }
-                topServices = parts.isEmpty() ? "No class selections recorded." : String.join("\n", parts);
             }
 
-            // expired memberships: show count and up to 5 names (end_date < today)
+            // classes grouped by classType with counts (e.g., HIIT (2), Yoga (1))
+            // exclude Attendance rows where classID IS NULL
             try (PreparedStatement p = conn.prepareStatement(
-                    "SELECT memberID, first_name, last_name, end_date FROM Member WHERE end_date < CURDATE() ORDER BY end_date DESC")) {
-                ResultSet rs = p.executeQuery();
-                List<String> names = new ArrayList<>();
-                int expiredCount = 0;
-                while (rs.next()) {
-                    expiredCount++;
-                    if (names.size() < 5) {
-                        String name = (rs.getString("first_name")==null? "" : rs.getString("first_name"))
-                                + " " + (rs.getString("last_name")==null? "" : rs.getString("last_name"));
-                        Date d = rs.getDate("end_date");
-                        names.add(name.trim() + " (" + (d==null? "?" : d.toString()) + ")");
+                    "SELECT c.classType AS type, COUNT(*) AS cnt " +
+                            "FROM Attendance a JOIN Class c ON a.classID = c.classID " +
+                            "WHERE a.memberID = ? AND a.classID IS NOT NULL " +
+                            "GROUP BY c.classType " +
+                            "ORDER BY cnt DESC")) {
+                p.setInt(1, memberId);
+                try (ResultSet rs = p.executeQuery()) {
+                    while (rs.next()) {
+                        String type = rs.getString("type");
+                        int cnt = rs.getInt("cnt");
+                        if (type == null) type = "Unknown";
+                        classesByType.put(type, cnt);
                     }
                 }
-                expired = "Count: " + expiredCount;
-                if (!names.isEmpty()) expired += "\n" + String.join("\n", names);
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            // fallback strings
-            planDist = planDist.isEmpty() ? "N/A" : planDist;
-            topServices = topServices.isEmpty() ? "N/A" : topServices;
-            expired = expired.isEmpty() ? "N/A" : expired;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            Alert err = new Alert(Alert.AlertType.ERROR, "Failed to load member report details.");
+            err.setHeaderText(null);
+            err.showAndWait();
+            return;
         }
 
-        rows.clear();
-        rows.add(new SummaryRow(totalMembers, planDist, topServices, expired));
+        // build the message
+        StringBuilder content = new StringBuilder();
+        content.append("Member ID: ").append(memberId).append("\n");
+        content.append("Name: ").append(
+                (m.firstName() == null ? "" : m.firstName()) + " " + (m.lastName() == null ? "" : m.lastName())
+        ).append("\n");
+        content.append("Membership Type: ").append(membershipType).append("\n");
+        content.append("Total Paid: ₱").append(String.format("%.2f", totalPaid)).append("\n");
+        content.append("Attendance Count: ").append(attendanceCount).append("\n\n");
+
+        content.append("Classes Taken (by type):\n");
+        if (classesByType.isEmpty()) {
+            content.append("  None\n");
+        } else {
+            for (Map.Entry<String,Integer> e : classesByType.entrySet()) {
+                content.append("  ").append(e.getKey()).append(" (").append(e.getValue()).append(")\n");
+            }
+        }
+
+        // Show in an information dialog (multi-line)
+        Alert info = new Alert(Alert.AlertType.INFORMATION);
+        info.setTitle("Member Report");
+        info.setHeaderText((m.firstName()==null?"":m.firstName()) + " " + (m.lastName()==null?"":m.lastName()));
+        info.setContentText(content.toString());
+        // ensure dialog grows if content is long
+        info.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        info.showAndWait();
     }
 
     @FXML
-    private void handleBack(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/MainMenu.fxml"));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
-
-    // simple data holder
-    public static class SummaryRow {
-        private final Integer totalMembers;
-        private final String planDist;
-        private final String topServices;
-        private final String expired;
-        public SummaryRow(Integer totalMembers, String planDist, String topServices, String expired) {
-            this.totalMembers = totalMembers;
-            this.planDist = planDist;
-            this.topServices = topServices;
-            this.expired = expired;
+    private void handleBack(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxmls/MainMenu.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Failed to return to Main Menu.").showAndWait();
         }
-        public Integer getTotalMembers() { return totalMembers; }
-        public String getPlanDist() { return planDist; }
-        public String getTopServices() { return topServices; }
-        public String getExpired() { return expired; }
     }
 }
