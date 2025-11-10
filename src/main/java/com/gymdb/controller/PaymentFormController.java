@@ -9,6 +9,8 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.event.ActionEvent;
 
 import javafx.fxml.FXMLLoader;
@@ -28,14 +30,13 @@ public class PaymentFormController {
     @FXML private ComboBox<String> fullName;
     @FXML private TextField amountPerMonth;
 
-    @FXML private ComboBox<String> service;         // Single ComboBox
+    @FXML private ComboBox<String> service;
     @FXML private ComboBox<String> plan;
     @FXML private ComboBox<String> memberStatus;
 
     private MemberCRUD memberCRUD = new MemberCRUD();
     private PaymentCRUD paymentCRUD = new PaymentCRUD();
 
-    // Store mapping fullName → memberID
     private HashMap<String, Integer> memberIds = new HashMap<>();
 
     @FXML
@@ -45,7 +46,6 @@ public class PaymentFormController {
         loadPlanAndStatusOptions();
     }
 
-    // Load members from DB into dropdown
     private void loadMembersToDropdown() {
         List<Member> members = memberCRUD.getAllRecords();
         for (Member m : members) {
@@ -55,7 +55,6 @@ public class PaymentFormController {
         }
     }
 
-    // Load services directly into single ComboBox
     private void loadServiceOptions() {
         service.setItems(FXCollections.observableArrayList(
                 "Yoga - Morning Yoga Flow", "Yoga - Stretch & Relax", "Yoga - Power Up",
@@ -66,13 +65,11 @@ public class PaymentFormController {
         ));
     }
 
-    // Load plan + status
     private void loadPlanAndStatusOptions() {
         plan.setItems(FXCollections.observableArrayList("Monthly", "Yearly"));
         memberStatus.setItems(FXCollections.observableArrayList("Active", "Expired"));
     }
 
-    // Generate RCPT number
     private String generatePaymentNumber() {
         int num = new Random().nextInt(9000) + 1000;
         return "RCPT-" + num;
@@ -86,7 +83,11 @@ public class PaymentFormController {
                 memberStatus.getValue() == null ||
                 amountPerMonth.getText().isEmpty()) {
 
-            System.out.println("Missing fields.");
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Incomplete Fields");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill in all fields.");
+            alert.showAndWait();
             return;
         }
 
@@ -96,14 +97,34 @@ public class PaymentFormController {
                 0,
                 generatePaymentNumber(),
                 new Timestamp(System.currentTimeMillis()),
-                plan.getValue(),          // transaction_type
+                plan.getValue(),
                 Double.parseDouble(amountPerMonth.getText()),
-                service.getValue(),       // payment_method
+                service.getValue(),
                 memberID
         );
 
         boolean success = paymentCRUD.addRecord(payment);
-        System.out.println(success ? "Payment saved." : "Failed to save payment.");
+
+        if (success) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Payment Successful");
+            alert.setHeaderText(null);
+            alert.setContentText("Payment has been saved successfully!");
+            alert.showAndWait();
+
+            // Clear fields after payment
+            fullName.setValue(null);
+            service.setValue(null);
+            plan.setValue(null);
+            memberStatus.setValue(null);
+            amountPerMonth.clear();
+        } else {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Payment Failed");
+            alert.setHeaderText(null);
+            alert.setContentText("Failed to save payment. Try again.");
+            alert.showAndWait();
+        }
     }
 
     @FXML

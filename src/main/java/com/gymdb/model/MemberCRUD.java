@@ -186,4 +186,14 @@ public class MemberCRUD {
         System.out.println("\nDeleting memberID = 4");
         System.out.println(crud.delRecord(4) ? "Record deleted." : "Delete failed.");
     }
+    public List<Member> getActiveMembers() {
+        List<Member> active = new ArrayList<>();
+        for (Member m : getAllRecords()) {
+            // Assuming you have a membership status field or use membershipType to check "Active"
+            if (m.membershipType() != null && m.membershipType().equalsIgnoreCase("Active")) {
+                active.add(m);
+            }
+        }
+        return active;
+    }
 }

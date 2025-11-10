@@ -135,5 +135,12 @@ public class PaymentCRUD {
         System.out.println(crud.delRecord(4) ? "Record deleted." : "Delete failed.");
     }
 
+    public double getTotalEarnings() {
+        double total = 0;
+        for (Payment p : getAllRecords()) {
+            total += p.amount(); // Assuming amount() returns double
+        }
+        return total;
+    }
 
 }

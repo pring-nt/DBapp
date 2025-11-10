@@ -140,4 +140,14 @@ public class EquipmentCRUD {
         System.out.println("\nDeleting equipmentID = 4");
         System.out.println(crud.delRecord(4) ? "Record deleted." : "Delete failed.");
     }
+
+    public List<Equipment> getAvailableEquipments() {
+        List<Equipment> available = new ArrayList<>();
+        for (Equipment e : getAllRecords()) {
+            if (e.quantity() > 0) { // Assuming quantity > 0 means available
+                available.add(e);
+            }
+        }
+        return available;
+    }
 }

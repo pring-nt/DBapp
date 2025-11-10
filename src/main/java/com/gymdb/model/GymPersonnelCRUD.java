@@ -133,4 +133,16 @@ public class GymPersonnelCRUD {
         System.out.println("\nDeleting personnelID = 4");
         System.out.println(crud.delRecord(4) ? "Record deleted." : "Delete failed.");
     }
+
+    public List<GymPersonnel> getActiveTrainers() {
+        List<GymPersonnel> active = new ArrayList<>();
+        for (GymPersonnel g : getAllRecords()) {
+            // Check personnelType is Trainer or Head Trainer, etc.
+            if (g.personnelType() != null && g.personnelType().toLowerCase().contains("trainer")) {
+                active.add(g);
+            }
+        }
+        return active;
+    }
+
 }

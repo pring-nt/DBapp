@@ -1,5 +1,6 @@
 package com.gymdb.controller;
 
+import com.gymdb.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,7 +8,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 
@@ -25,146 +28,72 @@ public class MainMenuController {
     @FXML private Button reportsTab;
     @FXML private Button backBtn;
 
+    // TextAreas for stats
+    @FXML private TextArea totalMembersField;
+    @FXML private TextArea staffUsersField;
+    @FXML private TextArea availableEquipmentsField;
+    @FXML private TextArea totalEarningsField;
+    @FXML private TextArea activeTrainersField;
+    @FXML private TextArea activeMembersField;
+
+    private MemberCRUD memberCRUD = new MemberCRUD();
+    private GymPersonnelCRUD gymPersonnelCRUD = new GymPersonnelCRUD();
+    private EquipmentCRUD equipmentCRUD = new EquipmentCRUD();
+    private PaymentCRUD paymentCRUD = new PaymentCRUD();
+
     @FXML
     public void initialize() {
-        // This runs after the FXML loads. You can initialize values here.
+        // Make stats non-editable
+        totalMembersField.setEditable(false);
+        staffUsersField.setEditable(false);
+        availableEquipmentsField.setEditable(false);
+        totalEarningsField.setEditable(false);
+        activeTrainersField.setEditable(false);
+        activeMembersField.setEditable(false);
+
+        // Delay refresh until after scene is loaded
+        javafx.application.Platform.runLater(this::refreshStats);
     }
 
-    // Event handlers (you’ll add navigation later)
-    @FXML
-    private void handleMembersTab(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/main-view.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-    }
-    @FXML
-    private void handleStaffTab(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/trainer_menu.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-    }
-    @FXML
-    private void handleEquipmentsTab(ActionEvent event) {
+    public void refreshStats() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/Equipment.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    @FXML
-    private void handleClassTab(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/Class.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            int totalMembers = memberCRUD.getAllRecords().size();
+            int activeMembers = memberCRUD.getActiveMembers().size();  // implement this method
+            int staffUsers = gymPersonnelCRUD.getAllRecords().size();
+            int activeTrainers = gymPersonnelCRUD.getActiveTrainers().size(); // implement this method
+            int availableEquipments = equipmentCRUD.getAvailableEquipments().size(); // implement this
+            double totalEarnings = paymentCRUD.getTotalEarnings(); // sum all payment amounts
 
-    }
-    @FXML
-    private void handleProgressTab(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/CustomersProgress.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            totalMembersField.setText(String.valueOf(totalMembers));
+            activeMembersField.setText(String.valueOf(activeMembers));
+            staffUsersField.setText(String.valueOf(staffUsers));
+            activeTrainersField.setText(String.valueOf(activeTrainers));
+            availableEquipmentsField.setText(String.valueOf(availableEquipments));
+            totalEarningsField.setText("₱" + totalEarnings);
 
-    }
-    @FXML
-    private void handlePaymentsTab(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/PaymentForm.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-
     }
-    @FXML
-    private void handleAttendanceTab(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/AttendanceMenu.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-    }
-    @FXML
-    private void handleLockerTab(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/Locker.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    // -------------------- Button Navigation Handlers --------------------
+    @FXML private void handleMembersTab(ActionEvent event) { navigate(event, "/fxmls/main-view.fxml"); }
+    @FXML private void handleStaffTab(ActionEvent event) { navigate(event, "/fxmls/trainer_menu.fxml"); }
+    @FXML private void handleEquipmentsTab(ActionEvent event) { navigate(event, "/fxmls/Equipment.fxml"); }
+    @FXML private void handleClassTab(ActionEvent event) { navigate(event, "/fxmls/Class.fxml"); }
+    @FXML private void handleProgressTab(ActionEvent event) { navigate(event, "/fxmls/CustomersProgress.fxml"); }
+    @FXML private void handlePaymentsTab(ActionEvent event) { navigate(event, "/fxmls/PaymentForm.fxml"); }
+    @FXML private void handleAttendanceTab(ActionEvent event) { navigate(event, "/fxmls/AttendanceMenu.fxml"); }
+    @FXML private void handleLockerTab(ActionEvent event) { navigate(event, "/fxmls/Locker.fxml"); }
+    @FXML private void handleProductsTab(ActionEvent event) { navigate(event, "/fxmls/ProductInventory.fxml"); }
+    @FXML private void handleReportsTab(ActionEvent event) { navigate(event, "/fxmls/members_report.fxml"); }
+    @FXML private void handleBack(ActionEvent event) { navigate(event, "/fxmls/AdminLogin.fxml"); }
 
-    }
-    @FXML
-    private void handleProductsTab(ActionEvent event) {
+    private void navigate(ActionEvent event, String fxmlPath) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/ProductInventory.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-    @FXML
-    private void handleReportsTab(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/members_report.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-    @FXML
-    private void handleBack(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/AdminLogin.fxml"));
-            Parent root = loader.load();
+            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -172,5 +101,4 @@ public class MainMenuController {
             e.printStackTrace();
         }
     }
-
 }
