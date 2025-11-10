@@ -1,96 +1,119 @@
 package com.gymdb.controller;
 
-import javafx.event.ActionEvent;
+import com.gymdb.model.Member;
+import com.gymdb.model.MemberCRUD;
+import com.gymdb.model.Payment;
+import com.gymdb.model.PaymentCRUD;
+
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
+import javafx.event.ActionEvent;
+
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.Node;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 
 public class PaymentFormController {
 
-    @FXML
-    private TextField fullName;
+    @FXML private ComboBox<String> fullName;
+    @FXML private TextField amountPerMonth;
+
+    @FXML private ComboBox<String> service;         // Single ComboBox
+    @FXML private ComboBox<String> plan;
+    @FXML private ComboBox<String> memberStatus;
+
+    private MemberCRUD memberCRUD = new MemberCRUD();
+    private PaymentCRUD paymentCRUD = new PaymentCRUD();
+
+    // Store mapping fullName → memberID
+    private HashMap<String, Integer> memberIds = new HashMap<>();
 
     @FXML
-    private TextField service;
+    public void initialize() {
+        loadMembersToDropdown();
+        loadServiceOptions();
+        loadPlanAndStatusOptions();
+    }
 
-    @FXML
-    private TextField amountPerMonth;
+    // Load members from DB into dropdown
+    private void loadMembersToDropdown() {
+        List<Member> members = memberCRUD.getAllRecords();
+        for (Member m : members) {
+            String full = m.firstName() + " " + m.lastName();
+            fullName.getItems().add(full);
+            memberIds.put(full, m.memberID());
+        }
+    }
 
-    @FXML
-    private TextField plan;
+    // Load services directly into single ComboBox
+    private void loadServiceOptions() {
+        service.setItems(FXCollections.observableArrayList(
+                "Yoga - Morning Yoga Flow", "Yoga - Stretch & Relax", "Yoga - Power Up",
+                "Strength Training - Body Pump Burn", "Strength Training - Core & Stability",
+                "Strength Training - Upper Body Blast",
+                "HIIT - HIIT Express", "HIIT - Total Body Inferno", "HIIT - Cardio Crush",
+                "Zumba - Zumba Dance Party", "Zumba - Latin Groove", "Zumba - Pop & Sweat"
+        ));
+    }
 
-    @FXML
-    private TextField memberStatus;
+    // Load plan + status
+    private void loadPlanAndStatusOptions() {
+        plan.setItems(FXCollections.observableArrayList("Monthly", "Yearly"));
+        memberStatus.setItems(FXCollections.observableArrayList("Active", "Expired"));
+    }
 
-    @FXML
-    private Button makepaymentBtn;
+    // Generate RCPT number
+    private String generatePaymentNumber() {
+        int num = new Random().nextInt(9000) + 1000;
+        return "RCPT-" + num;
+    }
 
-    @FXML
-    private Button backBtn;
-
-    // Called when the "Make Payment" button is pressed
     @FXML
     private void makePayment(ActionEvent event) {
-        String name = fullName.getText().trim();
-        String selectedService = service.getText().trim();
-        String amount = amountPerMonth.getText().trim();
-        String selectedPlan = plan.getText().trim();
-        String status = memberStatus.getText().trim();
+        if (fullName.getValue() == null ||
+                service.getValue() == null ||
+                plan.getValue() == null ||
+                memberStatus.getValue() == null ||
+                amountPerMonth.getText().isEmpty()) {
 
-        // Simple validation
-        if (name.isEmpty() || selectedService.isEmpty() || amount.isEmpty() || selectedPlan.isEmpty() || status.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Missing Information", "Please fill out all fields before making payment.");
+            System.out.println("Missing fields.");
             return;
         }
 
-        // (Optional) Validate that amount is numeric
-        try {
-            Double.parseDouble(amount);
-        } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Invalid Amount", "Please enter a valid numeric amount.");
-            return;
-        }
+        int memberID = memberIds.get(fullName.getValue());
 
-        // Simulate a successful payment
-        showAlert(Alert.AlertType.INFORMATION, "Payment Successful",
-                "Payment has been successfully processed for " + name + " (" + selectedPlan + " Plan).");
+        Payment payment = new Payment(
+                0,
+                generatePaymentNumber(),
+                new Timestamp(System.currentTimeMillis()),
+                plan.getValue(),          // transaction_type
+                Double.parseDouble(amountPerMonth.getText()),
+                service.getValue(),       // payment_method
+                memberID
+        );
 
-        // Clear fields after payment
-        clearFields();
+        boolean success = paymentCRUD.addRecord(payment);
+        System.out.println(success ? "Payment saved." : "Failed to save payment.");
     }
 
-    // Called when the "Back" button is pressed
     @FXML
-    private void handleBack(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/MainMenu.fxml"));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
-
-    // Utility method for showing alerts
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    // Clears all text fields
-    private void clearFields() {
-        fullName.clear();
-        service.clear();
-        amountPerMonth.clear();
-        plan.clear();
-        memberStatus.clear();
+    private void handleBack(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxmls/MainMenu.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
