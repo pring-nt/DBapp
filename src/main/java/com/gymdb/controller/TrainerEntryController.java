@@ -56,7 +56,7 @@ public class TrainerEntryController {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Confirm Add");
         confirm.setHeaderText(null);
-        confirm.setContentText("Are you sure you want to add trainer?");
+        confirm.setContentText("Are you sure you want to add " + type.toLowerCase() + "?");
         Optional<ButtonType> res = confirm.showAndWait();
 
         if (res.isEmpty() || res.get() != ButtonType.OK) {
@@ -77,12 +77,12 @@ public class TrainerEntryController {
 
         boolean ok = crud.addRecord(gp);
         if (ok) {
-            Alert info = new Alert(Alert.AlertType.INFORMATION, "Trainer added successfully.");
+            Alert info = new Alert(Alert.AlertType.INFORMATION, type + " added successfully.");
             info.setHeaderText(null);
             info.showAndWait();
             clearForm();
         } else {
-            Alert err = new Alert(Alert.AlertType.ERROR, "Failed to add trainer. Check console for details.");
+            Alert err = new Alert(Alert.AlertType.ERROR, "Failed to add " + type.toLowerCase() + ". Check console for details.");
             err.setHeaderText(null);
             err.showAndWait();
         }
