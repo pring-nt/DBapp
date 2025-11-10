@@ -1,5 +1,6 @@
 package com.gymdb.controller;
 
+import com.gymdb.model.Attendance;
 import com.gymdb.model.AttendanceCRUD;
 import com.gymdb.model.GymClass;
 import com.gymdb.model.GymClassCRUD;
@@ -15,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +31,6 @@ public class ClassController {
     @FXML private TableColumn<GymClassTableRow, String> colEndTime;
     @FXML private TableColumn<GymClassTableRow, Integer> colPersonnelID;
     @FXML private TableColumn<GymClassTableRow, Integer> colEnrolled;
-    @FXML private Button backBtn;
 
     private final GymClassCRUD gymClassCRUD = new GymClassCRUD();
     private final AttendanceCRUD attendanceCRUD = new AttendanceCRUD();
@@ -37,7 +38,6 @@ public class ClassController {
 
     @FXML
     private void initialize() {
-        // map table columns
         colClassID.setCellValueFactory(data -> data.getValue().classIDProperty().asObject());
         colClassName.setCellValueFactory(data -> data.getValue().classNameProperty());
         colScheduleDate.setCellValueFactory(data -> data.getValue().scheduleDateProperty());
@@ -53,20 +53,37 @@ public class ClassController {
         classRows.clear();
         List<GymClass> classes = gymClassCRUD.getAllRecords();
 
-        // get enrolled counts per class
         Map<Integer, Integer> enrolledCounts = new HashMap<>();
         for (GymClass g : classes) {
             enrolledCounts.put(g.classID(), attendanceCRUD.countByClassID(g.classID()));
         }
 
         for (GymClass g : classes) {
+
+            Attendance firstAttendance = attendanceCRUD.getEarliestByClassID(g.classID());
+
+            LocalDateTime startTime = null;
+
+            if (firstAttendance != null && firstAttendance.datetime() != null) {
+                startTime = firstAttendance.datetime();
+            }
+
+            LocalDateTime endTime = (startTime != null) ? startTime.plusHours(1) : null;
+
+            String scheduleDateStr =
+                    (g.scheduleDate() != null) ? g.scheduleDate().toString() :
+                            (startTime != null) ? startTime.toLocalDate().toString() : "";
+
+            String startTimeStr = (startTime != null) ? startTime.toLocalTime().toString() : "";
+            String endTimeStr = (endTime != null) ? endTime.toLocalTime().toString() : "";
+
             classRows.add(new GymClassTableRow(
                     g.classID(),
                     g.className(),
-                    g.scheduleDate() != null ? g.scheduleDate().toString() : "",
-                    g.startTime() != null ? g.startTime().toString() : "",
-                    g.endTime() != null ? g.endTime().toString() : "",
-                    g.personnelID() != null ? g.personnelID() : 0,
+                    scheduleDateStr,
+                    startTimeStr,
+                    endTimeStr,
+                    (g.personnelID() != null) ? g.personnelID() : 0,
                     enrolledCounts.getOrDefault(g.classID(), 0)
             ));
         }
@@ -76,13 +93,12 @@ public class ClassController {
 
     @FXML
     private void handleBack(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/MainMenu.fxml")); // adjust path
+        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/MainMenu.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
     }
 
-    // Inner class for table row representation
     public static class GymClassTableRow {
         private final javafx.beans.property.IntegerProperty classID;
         private final javafx.beans.property.StringProperty className;
@@ -111,5 +127,4 @@ public class ClassController {
         public javafx.beans.property.IntegerProperty personnelIDProperty() { return personnelID; }
         public javafx.beans.property.IntegerProperty enrolledProperty() { return enrolled; }
     }
-
 }

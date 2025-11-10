@@ -10,11 +10,12 @@ public class AttendanceCRUD {
 
     // create
     public boolean addRecord(Attendance attendance) {
-        String sql = "INSERT INTO Attendance (memberID, classID) VALUES (?, ?)";
+        String sql = "INSERT INTO Attendance (memberID, classID, attendance_datetime) VALUES (?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, attendance.memberID());
             stmt.setInt(2, attendance.classID());
+            stmt.setTimestamp(3, Timestamp.valueOf(attendance.datetime())); // use record getter
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -80,6 +81,29 @@ public class AttendanceCRUD {
         return null;
     }
 
+    // get earliest attendance by classID
+    public Attendance getEarliestByClassID(int classID) {
+        String sql = "SELECT * FROM Attendance WHERE classID = ? ORDER BY attendance_datetime ASC LIMIT 1";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, classID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Timestamp ts = rs.getTimestamp("attendance_datetime");
+                LocalDateTime dt = ts != null ? ts.toLocalDateTime() : null;
+                return new Attendance(
+                        rs.getInt("attendanceID"),
+                        dt,
+                        rs.getInt("memberID"),
+                        rs.getInt("classID")
+                );
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
     // update
     public boolean modRecord(int attendanceID, int newMemberID, int newClassID) {
         String sql = "UPDATE Attendance SET memberID = ?, classID = ? WHERE attendanceID = ?";
@@ -110,39 +134,7 @@ public class AttendanceCRUD {
         }
     }
 
-    // TESTER
-    // NOTE: assumes that the gym_db contains stuff.
-    public static void main(String[] args) {
-        AttendanceCRUD crud = new AttendanceCRUD();
-
-        // create
-        System.out.println("Adding record...");
-        Attendance newAttendance = new Attendance(0, null, 1, 2); // assume memberID=1, classID=2 exist
-        boolean added = crud.addRecord(newAttendance);
-        System.out.println(added ? "Record added successfully." : "Failed to add record.");
-
-        // read all
-        System.out.println("\nAll records:");
-        crud.getAllRecords().forEach(System.out::println);
-
-        // read one
-        System.out.println("\nFetching record with ID = 1");
-        Attendance a = crud.getRecord(1);
-        System.out.println(a);
-
-        // update
-        System.out.println("\nUpdating record with ID = 1");
-        boolean updated = crud.modRecord(1, 3, 3); // new memberID=3, classID=3
-        System.out.println(updated ? "Record updated successfully." : "Failed to update record.");
-
-
-        // delete
-        System.out.println("\nDeleting record with ID = 1");
-        boolean deleted = crud.delRecord(5);
-        System.out.println(deleted ? "Record deleted successfully." : "Failed to deleted record.");
-
-    }
-
+    // count enrolled per class
     public int countByClassID(int classID) {
         String sql = "SELECT COUNT(*) FROM Attendance WHERE classID = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -155,6 +147,4 @@ public class AttendanceCRUD {
         }
         return 0;
     }
-
-
 }
