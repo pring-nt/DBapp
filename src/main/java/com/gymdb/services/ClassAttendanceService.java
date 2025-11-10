@@ -1,6 +1,5 @@
 package com.gymdb.services;
 
-import com.gymdb.model.Attendance;
 import com.gymdb.utils.DBConnection;
 
 import java.sql.*;
