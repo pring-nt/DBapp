@@ -29,13 +29,12 @@
       <Button fx:id="reportsTab" layoutX="469.0" layoutY="272.0" onAction="#handleReportsTab" opacity="0.0" prefHeight="81.0" prefWidth="94.0" />
       <Button fx:id="backBtn" layoutX="264.0" layoutY="360.0" onAction="#handleBack" opacity="0.0" prefHeight="26.0" prefWidth="73.0" />
 
-      <!-- TextAreas for Stats -->
-      <TextArea fx:id="totalMembersField" editable="false" layoutX="40.0" layoutY="91.0" prefHeight="39.0" prefWidth="34.0" />
-      <TextArea fx:id="activeMembersField" editable="false" layoutX="136.0" layoutY="90.0" prefHeight="41.0" prefWidth="34.0" />
-      <TextArea fx:id="staffUsersField" editable="false" layoutX="519.0" layoutY="90.0" prefHeight="41.0" prefWidth="24.0" />
-      <TextArea fx:id="activeTrainersField" editable="false" layoutX="424.0" layoutY="90.0" prefHeight="41.0" prefWidth="35.0" />
-      <TextArea fx:id="availableEquipmentsField" editable="false" layoutX="233.0" layoutY="90.0" prefHeight="41.0" prefWidth="27.0" />
-      <TextArea fx:id="totalEarningsField" editable="false" layoutX="326.0" layoutY="90.0" prefHeight="41.0" prefWidth="30.0" />
-
+      <!-- Transparent TextAreas for Stats -->
+      <TextArea fx:id="totalMembersField" editable="false" layoutX="40.0" layoutY="80.0" prefHeight="15.0" prefWidth="20.0" style="-fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-text-fill: black; -fx-border-color: transparent;" />
+      <TextArea fx:id="activeMembersField" editable="false" layoutX="514.0" layoutY="83.0" prefHeight="15.0" prefWidth="20.0" style="-fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-text-fill: black; -fx-border-color: transparent;" />
+      <TextArea fx:id="availableProductsField" editable="false" layoutX="136.0" layoutY="83.0" prefHeight="15.0" prefWidth="20.0" style="-fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-text-fill: black; -fx-border-color: transparent;" />
+      <TextArea fx:id="activeTrainersField" editable="false" layoutX="422.0" layoutY="81.0" prefHeight="15.0" prefWidth="20.0" style="-fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-text-fill: black; -fx-border-color: transparent;" />
+      <TextArea fx:id="availableEquipmentsField" editable="false" layoutX="233.0" layoutY="82.0" prefHeight="15.0" prefWidth="20.0" style="-fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-text-fill: black; -fx-border-color: transparent;" />
+      <TextArea fx:id="totalEarningsField" editable="false" layoutX="328.0" layoutY="83.0" prefHeight="15.0" prefWidth="20.0" style="-fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-text-fill: black; -fx-border-color: transparent;" />
    </children>
 </AnchorPane>

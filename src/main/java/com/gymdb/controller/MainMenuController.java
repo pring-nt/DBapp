@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 
@@ -30,7 +29,7 @@ public class MainMenuController {
 
     // TextAreas for stats
     @FXML private TextArea totalMembersField;
-    @FXML private TextArea staffUsersField;
+    @FXML private TextArea availableProductsField; // RENAMED
     @FXML private TextArea availableEquipmentsField;
     @FXML private TextArea totalEarningsField;
     @FXML private TextArea activeTrainersField;
@@ -40,12 +39,13 @@ public class MainMenuController {
     private GymPersonnelCRUD gymPersonnelCRUD = new GymPersonnelCRUD();
     private EquipmentCRUD equipmentCRUD = new EquipmentCRUD();
     private PaymentCRUD paymentCRUD = new PaymentCRUD();
+    private ProductCRUD productCRUD = new ProductCRUD(); // NEW
 
     @FXML
     public void initialize() {
         // Make stats non-editable
         totalMembersField.setEditable(false);
-        staffUsersField.setEditable(false);
+        availableProductsField.setEditable(false);
         availableEquipmentsField.setEditable(false);
         totalEarningsField.setEditable(false);
         activeTrainersField.setEditable(false);
@@ -55,22 +55,20 @@ public class MainMenuController {
         javafx.application.Platform.runLater(this::refreshStats);
     }
 
-
-
     public void refreshStats() {
         try {
             int totalMembers = memberCRUD.getAllRecords().size();
-            int activeMembers = memberCRUD.getActiveMembers().size();  // implement this method
-            int staffUsers = gymPersonnelCRUD.getAllRecords().size();
-            int activeTrainers = gymPersonnelCRUD.getActiveTrainers().size(); // implement this method
-            int availableEquipments = equipmentCRUD.getAvailableEquipments().size(); // implement this
-            double totalEarnings = paymentCRUD.getTotalEarnings(); // sum all payment amounts
+            int activeMembers = memberCRUD.getActiveMembers().size();
+            int activeTrainers = gymPersonnelCRUD.getActiveTrainers().size();
+            int availableEquipments = equipmentCRUD.getAvailableEquipments().size();
+            int availableProducts = productCRUD.getTotalProducts(); // NOW mapped correctly
+            double totalEarnings = paymentCRUD.getTotalEarnings();
 
             totalMembersField.setText(String.valueOf(totalMembers));
             activeMembersField.setText(String.valueOf(activeMembers));
-            staffUsersField.setText(String.valueOf(staffUsers));
             activeTrainersField.setText(String.valueOf(activeTrainers));
             availableEquipmentsField.setText(String.valueOf(availableEquipments));
+            availableProductsField.setText(String.valueOf(availableProducts)); // SHOW products here
             totalEarningsField.setText("₱" + totalEarnings);
 
         } catch (Exception ex) {

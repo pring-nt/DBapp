@@ -43,7 +43,6 @@ public class ClassController {
         colScheduleDate.setCellValueFactory(data -> data.getValue().scheduleDateProperty());
         colStartTime.setCellValueFactory(data -> data.getValue().startTimeProperty());
         colEndTime.setCellValueFactory(data -> data.getValue().endTimeProperty());
-        colPersonnelID.setCellValueFactory(data -> data.getValue().personnelIDProperty().asObject());
         colEnrolled.setCellValueFactory(data -> data.getValue().enrolledProperty().asObject());
 
         loadTableData();
@@ -105,7 +104,6 @@ public class ClassController {
         private final javafx.beans.property.StringProperty scheduleDate;
         private final javafx.beans.property.StringProperty startTime;
         private final javafx.beans.property.StringProperty endTime;
-        private final javafx.beans.property.IntegerProperty personnelID;
         private final javafx.beans.property.IntegerProperty enrolled;
 
         public GymClassTableRow(int classID, String className, String scheduleDate,
@@ -115,7 +113,6 @@ public class ClassController {
             this.scheduleDate = new javafx.beans.property.SimpleStringProperty(scheduleDate);
             this.startTime = new javafx.beans.property.SimpleStringProperty(startTime);
             this.endTime = new javafx.beans.property.SimpleStringProperty(endTime);
-            this.personnelID = new javafx.beans.property.SimpleIntegerProperty(personnelID);
             this.enrolled = new javafx.beans.property.SimpleIntegerProperty(enrolled);
         }
 
@@ -124,7 +121,6 @@ public class ClassController {
         public javafx.beans.property.StringProperty scheduleDateProperty() { return scheduleDate; }
         public javafx.beans.property.StringProperty startTimeProperty() { return startTime; }
         public javafx.beans.property.StringProperty endTimeProperty() { return endTime; }
-        public javafx.beans.property.IntegerProperty personnelIDProperty() { return personnelID; }
         public javafx.beans.property.IntegerProperty enrolledProperty() { return enrolled; }
     }
 }

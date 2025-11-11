@@ -188,12 +188,16 @@ public class MemberCRUD {
     }
     public List<Member> getActiveMembers() {
         List<Member> active = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+
         for (Member m : getAllRecords()) {
-            // Assuming you have a membership status field or use membershipType to check "Active"
-            if (m.membershipType() != null && m.membershipType().equalsIgnoreCase("Active")) {
-                active.add(m);
+            if (m.startDate() != null && m.endDate() != null) {
+                if (( !today.isBefore(m.startDate()) ) && ( !today.isAfter(m.endDate()) )) {
+                    active.add(m);
+                }
             }
         }
+
         return active;
     }
 }

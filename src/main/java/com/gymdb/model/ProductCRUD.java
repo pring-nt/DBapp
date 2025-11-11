@@ -110,8 +110,24 @@ public class ProductCRUD {
         }
     }
 
+    // -------------------- UPDATED METHOD --------------------
+    public int getTotalProducts() {
+        String sql = "SELECT SUM(stockQty) AS total FROM Product"; // sum stockQty
+        try (Connection conn = DBConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            if (rs.next()) {
+                return rs.getInt("total"); // total units in stock
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        return 0;
+    }
+
     // TESTER
-    // NOTE: only works when you have sample data.
     public static void main(String[] args) {
         ProductCRUD crud = new ProductCRUD();
 
@@ -131,5 +147,7 @@ public class ProductCRUD {
 
         System.out.println("\nDeleting productID = 4");
         System.out.println(crud.delRecord(4) ? "Record deleted." : "Delete failed.");
+
+        System.out.println("\nTotal products in stock: " + crud.getTotalProducts());
     }
 }
