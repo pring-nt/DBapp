@@ -25,14 +25,14 @@ public class CustomersDashboardController {
     }
 
     @FXML
-    private void handleReminders(ActionEvent event) {
-        System.out.println("Reminders clicked");
+    private void handleProduct(ActionEvent event) {
+        System.out.println("Product clicked");
         // loadNextScreen(event, "/path/to/reminders.fxml");
     }
 
     @FXML
-    private void handleAnnouncements(ActionEvent event) {
-        System.out.println("Announcements clicked");
+    private void handleLocker(ActionEvent event) {
+        System.out.println("Locker clicked");
         // loadNextScreen(event, "/path/to/announcements.fxml");
     }
 
