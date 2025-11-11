@@ -26,8 +26,14 @@ public class CustomersDashboardController {
 
     @FXML
     private void handleProduct(ActionEvent event) {
-        System.out.println("Product clicked");
-        // loadNextScreen(event, "/path/to/reminders.fxml");
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxmls/BuyProduct.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @FXML
