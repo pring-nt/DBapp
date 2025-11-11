@@ -10,12 +10,12 @@
    <children>
       <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../pngs/checkattendance_bg.png" />
+            <Image url="@../pngs/check_attendance.png" />
          </image>
       </ImageView>
-      <Button fx:id="btnBack" layoutX="247.0" layoutY="347.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="25.0" prefWidth="106.0" text="Button" />
-      <Button fx:id="btnCheckIn" layoutX="324.0" layoutY="347.0" mnemonicParsing="false" onAction="#handleCheckIn" opacity="0.0" prefHeight="25.0" prefWidth="106.0" text="Button" />
+      <Button fx:id="btnBack" layoutX="158.0" layoutY="347.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="25.0" prefWidth="106.0" text="Button" />
       <ComboBox fx:id="cmbMember" layoutX="114.0" layoutY="187.0" prefWidth="150.0" />
       <ComboBox fx:id="cmbClassType" layoutX="333.0" layoutY="187.0" prefHeight="26.0" prefWidth="150.0" />
+      <Button fx:id="btnCheckIn" layoutX="323.0" layoutY="347.0" mnemonicParsing="false" onAction="#handleCheckIn" opacity="0.0" prefHeight="25.0" prefWidth="100.0" text="check in" />
    </children>
 </AnchorPane>
