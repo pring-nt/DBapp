@@ -45,6 +45,12 @@ public class BuyProductController {
     private ProductCRUD crud = new ProductCRUD();
     private ObservableList<Product> productList = FXCollections.observableArrayList();
 
+    private String currentUsername;
+
+    public void setCurrentUsername(String username) {
+        this.currentUsername = username;
+    }
+
     @FXML
     private void initialize() {
         // Set up columns

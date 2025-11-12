@@ -38,11 +38,7 @@ public class ReportsController {
     private ObservableList<User> usersList = FXCollections.observableArrayList();
     private String currentUsername;
 
-    /** Call this before showing the scene */
-    public void setCurrentUsername(String username) {
-        this.currentUsername = username;
-        loadUsers(); // Load user's data immediately
-    }
+    private boolean initialized = false;
 
     @FXML
     public void initialize() {
@@ -52,7 +48,23 @@ public class ReportsController {
         planCol.setCellValueFactory(new PropertyValueFactory<>("plan"));
         serviceTypeCol.setCellValueFactory(new PropertyValueFactory<>("serviceType"));
         serviceNameCol.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
+
+        initialized = true;
+
+        if (currentUsername != null) {
+            loadUsers();
+        }
     }
+
+    public void setCurrentUsername(String username) {
+        this.currentUsername = username;
+
+        // Only load if already initialized
+        if (initialized) {
+            loadUsers();
+        }
+    }
+
 
     private void loadUsers() {
         usersList.clear();
@@ -71,7 +83,6 @@ public class ReportsController {
                             data[6], // serviceType
                             data[7]  // serviceName
                     ));
-                    break;
                 }
             }
         } catch (IOException e) {

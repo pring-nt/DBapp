@@ -21,7 +21,13 @@ public class CustomersDashboardController {
     @FXML
     private void handleToDo(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxmls/ToDoList.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/ToDoList.fxml"));
+            Parent root = loader.load();
+
+            // Pass currentUsername to ToDo controller
+            ToDoListController controller = loader.getController();
+            controller.setCurrentUsername(currentUsername);
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -33,7 +39,13 @@ public class CustomersDashboardController {
     @FXML
     private void handleProduct(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxmls/BuyProduct.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/BuyProduct.fxml"));
+            Parent root = loader.load();
+
+            // Pass currentUsername to BuyProduct controller if needed
+            BuyProductController controller = loader.getController();
+            controller.setCurrentUsername(currentUsername);
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -45,7 +57,7 @@ public class CustomersDashboardController {
     @FXML
     private void handleLocker(ActionEvent event) {
         System.out.println("Locker clicked");
-        // loadNextScreen(event, "/path/to/announcements.fxml");
+        // If you have a locker controller, you can pass currentUsername similarly
     }
 
     @FXML
@@ -54,7 +66,6 @@ public class CustomersDashboardController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/Reports.fxml"));
             Parent root = loader.load();
 
-            // Get the controller and pass the current username
             ReportsController reportsController = loader.getController();
             reportsController.setCurrentUsername(currentUsername);
 
@@ -66,25 +77,12 @@ public class CustomersDashboardController {
         }
     }
 
-
     @FXML
     private void handleBack(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/CustomerLogin.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Optional reusable screen switcher
-    private void loadNextScreen(ActionEvent event, String fxmlPath) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
-            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {

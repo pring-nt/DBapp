@@ -25,6 +25,12 @@ public class ToDoListController {
     private final ObservableList<Task> tasks = FXCollections.observableArrayList();
     private final File taskFile = new File("tasks.txt");
 
+    private String currentUsername;
+
+    public void setCurrentUsername(String username) {
+        this.currentUsername = username;
+    }
+
     @FXML
     public void initialize() {
         loadTasksFromFile();
