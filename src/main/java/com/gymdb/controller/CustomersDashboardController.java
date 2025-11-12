@@ -12,6 +12,12 @@ import java.io.IOException;
 
 public class CustomersDashboardController {
 
+    private String currentUsername;
+
+    public void setCurrentUsername(String username) {
+        this.currentUsername = username;
+    }
+
     @FXML
     private void handleToDo(ActionEvent event) {
         try {
@@ -45,14 +51,21 @@ public class CustomersDashboardController {
     @FXML
     private void handleReports(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxmls/Reports.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/Reports.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller and pass the current username
+            ReportsController reportsController = loader.getController();
+            reportsController.setCurrentUsername(currentUsername);
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
 
     @FXML
     private void handleBack(ActionEvent event) {

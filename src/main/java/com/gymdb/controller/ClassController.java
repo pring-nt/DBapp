@@ -62,7 +62,6 @@ public class ClassController {
             Attendance firstAttendance = attendanceCRUD.getEarliestByClassID(g.classID());
 
             LocalDateTime startTime = null;
-
             if (firstAttendance != null && firstAttendance.datetime() != null) {
                 startTime = firstAttendance.datetime();
             }
@@ -76,9 +75,12 @@ public class ClassController {
             String startTimeStr = (startTime != null) ? startTime.toLocalTime().toString() : "";
             String endTimeStr = (endTime != null) ? endTime.toLocalTime().toString() : "";
 
+            // CLEAN class name by removing "(placeholder)" if it exists
+            String cleanClassName = g.className() != null ? g.className().replace("(placeholder)", "").trim() : "";
+
             classRows.add(new GymClassTableRow(
                     g.classID(),
-                    g.className(),
+                    cleanClassName,
                     scheduleDateStr,
                     startTimeStr,
                     endTimeStr,

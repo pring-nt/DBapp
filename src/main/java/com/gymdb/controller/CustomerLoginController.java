@@ -21,32 +21,6 @@ public class CustomerLoginController {
     @FXML
     private TextField passwordField;
 
-    @FXML
-    private void handleLogin(ActionEvent event) {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-
-        if (username.isEmpty() || password.isEmpty()) {
-            showAlert("Missing Information", "Please enter both username and password.");
-            return;
-        }
-
-        if (validateUser(username, password)) {
-            showAlert("Login Successful", "Welcome, " + username + "!");
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/CustomersDashboard.fxml"));
-                Parent root = loader.load();
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            showAlert("Login Failed", "Invalid username or password.");
-        }
-    }
-
     private boolean validateUser(String user, String pass) {
         try {
             java.util.List<String> lines = java.nio.file.Files.readAllLines(java.nio.file.Paths.get("users.txt"));
@@ -66,8 +40,36 @@ public class CustomerLoginController {
         return false;
     }
 
+    @FXML
+    private void handleLogin(ActionEvent event) {
+        String username = usernameField.getText();
+        String password = passwordField.getText();
 
+        if (username.isEmpty() || password.isEmpty()) {
+            showAlert("Missing Information", "Please enter both username and password.");
+            return;
+        }
 
+        if (validateUser(username, password)) {
+            showAlert("Login Successful", "Welcome, " + username + "!");
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/CustomersDashboard.fxml"));
+                Parent root = loader.load();
+
+                // Pass username to CustomersDashboardController
+                CustomersDashboardController controller = loader.getController();
+                controller.setCurrentUsername(username);
+
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            showAlert("Login Failed", "Invalid username or password.");
+        }
+    }
 
     @FXML
     private void handleAdmin(ActionEvent event) {
@@ -161,7 +163,6 @@ public class CustomerLoginController {
         grid.add(new Label("Password:"), 0, 2);   grid.add(password, 1, 2);
         grid.add(new Label("Phone:"), 0, 3);      grid.add(phone, 1, 3);
         grid.add(new Label("Address:"), 0, 4);    grid.add(address, 1, 4);
-
         grid.add(new Label("Plan:"), 0, 5);       grid.add(planBox, 1, 5);
         grid.add(new Label("Service:"), 0, 6);    grid.add(serviceBox, 1, 6);
         grid.add(new Label("Class:"), 0, 7);      grid.add(classBox, 1, 7);
@@ -201,7 +202,6 @@ public class CustomerLoginController {
 
         dialog.showAndWait();
     }
-
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

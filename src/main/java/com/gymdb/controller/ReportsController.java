@@ -24,53 +24,54 @@ public class ReportsController {
 
     @FXML
     private TableColumn<User, String> fullNameCol;
-
     @FXML
     private TableColumn<User, String> contactCol;
-
     @FXML
     private TableColumn<User, String> locationCol;
-
     @FXML
     private TableColumn<User, String> planCol;
-
     @FXML
     private TableColumn<User, String> serviceTypeCol;
-
     @FXML
     private TableColumn<User, String> serviceNameCol;
 
     private ObservableList<User> usersList = FXCollections.observableArrayList();
+    private String currentUsername;
+
+    /** Call this before showing the scene */
+    public void setCurrentUsername(String username) {
+        this.currentUsername = username;
+        loadUsers(); // Load user's data immediately
+    }
 
     @FXML
     public void initialize() {
-        // Set up columns
         fullNameCol.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         contactCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
         locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
         planCol.setCellValueFactory(new PropertyValueFactory<>("plan"));
         serviceTypeCol.setCellValueFactory(new PropertyValueFactory<>("serviceType"));
         serviceNameCol.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
-
-        loadUsers();
     }
 
     private void loadUsers() {
         usersList.clear();
+        if (currentUsername == null || currentUsername.isEmpty()) return;
+
         try (BufferedReader br = new BufferedReader(new FileReader("users.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
-                // Split CSV: username,password,fullName,contact,location,plan,serviceType,serviceName
                 String[] data = line.split(",");
-                if (data.length >= 8) {
-                    String fullName = data[2];
-                    String contact = data[3];
-                    String location = data[4];
-                    String plan = data[5];
-                    String serviceType = data[6];
-                    String serviceName = data[7];
-
-                    usersList.add(new User(fullName, contact, location, plan, serviceType, serviceName));
+                if (data.length >= 8 && data[0].equals(currentUsername)) {
+                    usersList.add(new User(
+                            data[2], // fullName
+                            data[3], // contact
+                            data[4], // location
+                            data[5], // plan
+                            data[6], // serviceType
+                            data[7]  // serviceName
+                    ));
+                    break;
                 }
             }
         } catch (IOException e) {
@@ -80,7 +81,6 @@ public class ReportsController {
         reportsTable.setItems(usersList);
     }
 
-    // User class for TableView
     public static class User {
         private final String fullName;
         private final String contact;
@@ -111,7 +111,29 @@ public class ReportsController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/CustomersDashboard.fxml"));
             Parent root = loader.load();
+
+            // Pass currentUsername to dashboard if needed
+            CustomersDashboardController controller = loader.getController();
+            controller.setCurrentUsername(currentUsername);
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /** Utility method to open Reports properly from any screen */
+    public static void openReports(String username, Node eventSource, String fxmlPath) {
+        try {
+            FXMLLoader loader = new FXMLLoader(ReportsController.class.getResource(fxmlPath));
+            Parent root = loader.load();
+
+            ReportsController controller = loader.getController();
+            controller.setCurrentUsername(username);
+
+            Stage stage = (Stage) ((Node) eventSource).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
