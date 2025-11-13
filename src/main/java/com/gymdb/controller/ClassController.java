@@ -26,10 +26,6 @@ public class ClassController {
     @FXML private TableView<GymClassTableRow> tblClasses;
     @FXML private TableColumn<GymClassTableRow, Integer> colClassID;
     @FXML private TableColumn<GymClassTableRow, String> colClassName;
-    @FXML private TableColumn<GymClassTableRow, String> colScheduleDate;
-    @FXML private TableColumn<GymClassTableRow, String> colStartTime;
-    @FXML private TableColumn<GymClassTableRow, String> colEndTime;
-    @FXML private TableColumn<GymClassTableRow, Integer> colPersonnelID;
     @FXML private TableColumn<GymClassTableRow, Integer> colEnrolled;
 
     private final GymClassCRUD gymClassCRUD = new GymClassCRUD();
@@ -40,9 +36,6 @@ public class ClassController {
     private void initialize() {
         colClassID.setCellValueFactory(data -> data.getValue().classIDProperty().asObject());
         colClassName.setCellValueFactory(data -> data.getValue().classNameProperty());
-        colScheduleDate.setCellValueFactory(data -> data.getValue().scheduleDateProperty());
-        colStartTime.setCellValueFactory(data -> data.getValue().startTimeProperty());
-        colEndTime.setCellValueFactory(data -> data.getValue().endTimeProperty());
         colEnrolled.setCellValueFactory(data -> data.getValue().enrolledProperty().asObject());
 
         loadTableData();
@@ -103,26 +96,17 @@ public class ClassController {
     public static class GymClassTableRow {
         private final javafx.beans.property.IntegerProperty classID;
         private final javafx.beans.property.StringProperty className;
-        private final javafx.beans.property.StringProperty scheduleDate;
-        private final javafx.beans.property.StringProperty startTime;
-        private final javafx.beans.property.StringProperty endTime;
         private final javafx.beans.property.IntegerProperty enrolled;
 
         public GymClassTableRow(int classID, String className, String scheduleDate,
                                 String startTime, String endTime, int personnelID, int enrolled) {
             this.classID = new javafx.beans.property.SimpleIntegerProperty(classID);
             this.className = new javafx.beans.property.SimpleStringProperty(className);
-            this.scheduleDate = new javafx.beans.property.SimpleStringProperty(scheduleDate);
-            this.startTime = new javafx.beans.property.SimpleStringProperty(startTime);
-            this.endTime = new javafx.beans.property.SimpleStringProperty(endTime);
             this.enrolled = new javafx.beans.property.SimpleIntegerProperty(enrolled);
         }
 
         public javafx.beans.property.IntegerProperty classIDProperty() { return classID; }
         public javafx.beans.property.StringProperty classNameProperty() { return className; }
-        public javafx.beans.property.StringProperty scheduleDateProperty() { return scheduleDate; }
-        public javafx.beans.property.StringProperty startTimeProperty() { return startTime; }
-        public javafx.beans.property.StringProperty endTimeProperty() { return endTime; }
         public javafx.beans.property.IntegerProperty enrolledProperty() { return enrolled; }
     }
 }

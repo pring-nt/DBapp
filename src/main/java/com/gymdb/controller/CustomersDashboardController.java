@@ -19,45 +19,18 @@ public class CustomersDashboardController {
     }
 
     @FXML
-    private void handleToDo(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/ToDoList.fxml"));
-            Parent root = loader.load();
-
-            // Pass currentUsername to ToDo controller
-            ToDoListController controller = loader.getController();
-            controller.setCurrentUsername(currentUsername);
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    private void handleToDo(ActionEvent event) throws IOException {
+        loadScreen(event, "/fxmls/ToDoList.fxml");
     }
 
     @FXML
-    private void handleProduct(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/BuyProduct.fxml"));
-            Parent root = loader.load();
-
-            // Pass currentUsername to BuyProduct controller if needed
-            BuyProductController controller = loader.getController();
-            controller.setCurrentUsername(currentUsername);
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    private void handleProduct(ActionEvent event) throws IOException {
+        loadScreen(event, "/fxmls/BuyProduct.fxml");
     }
 
     @FXML
     private void handleLocker(ActionEvent event) {
         System.out.println("Locker clicked");
-        // If you have a locker controller, you can pass currentUsername similarly
     }
 
     @FXML
@@ -78,15 +51,23 @@ public class CustomersDashboardController {
     }
 
     @FXML
-    private void handleBack(ActionEvent event) {
+    private void handleBack(ActionEvent event) throws IOException {
+        loadScreen(event, "/fxmls/CustomerLogin.fxml");
+    }
+
+    private void loadScreen(ActionEvent event, String fxmlPath) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+        Parent root = loader.load();
+
+        // Pass current username if the next screen is Dashboard or Reports
+        Object controller = loader.getController();
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/CustomerLogin.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            controller.getClass().getMethod("setCurrentUsername", String.class)
+                    .invoke(controller, currentUsername);
+        } catch (Exception ignored) {}
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }

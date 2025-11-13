@@ -12,6 +12,9 @@ import javafx.stage.Stage;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 public class CustomerLoginController {
 
@@ -20,25 +23,6 @@ public class CustomerLoginController {
 
     @FXML
     private TextField passwordField;
-
-    private boolean validateUser(String user, String pass) {
-        try {
-            java.util.List<String> lines = java.nio.file.Files.readAllLines(java.nio.file.Paths.get("users.txt"));
-
-            for (String line : lines) {
-                String[] data = line.split(",");
-
-                // data[0] = username, data[1] = password
-                if (data.length >= 2 && data[0].equals(user) && data[1].equals(pass)) {
-                    return true;
-                }
-            }
-        } catch (IOException e) {
-            // If file doesn't exist or can't be read
-            return false;
-        }
-        return false;
-    }
 
     @FXML
     private void handleLogin(ActionEvent event) {
@@ -56,9 +40,9 @@ public class CustomerLoginController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/CustomersDashboard.fxml"));
                 Parent root = loader.load();
 
-                // Pass username to CustomersDashboardController
-                CustomersDashboardController controller = loader.getController();
-                controller.setCurrentUsername(username);
+                // Pass username to dashboard
+                CustomersDashboardController dashboardController = loader.getController();
+                dashboardController.setCurrentUsername(username);
 
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.setScene(new Scene(root));
@@ -71,30 +55,30 @@ public class CustomerLoginController {
         }
     }
 
-    @FXML
-    private void handleAdmin(ActionEvent event) {
+    private boolean validateUser(String user, String pass) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/AdminLogin.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
+            List<String> lines = Files.readAllLines(Paths.get("users.txt"));
+
+            for (String line : lines) {
+                String[] data = line.split(",");
+                if (data.length >= 2 && data[0].equals(user) && data[1].equals(pass)) {
+                    return true;
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
+    }
+
+    @FXML
+    private void handleAdmin(ActionEvent event) {
+        loadScreen(event, "/fxmls/AdminLogin.fxml");
     }
 
     @FXML
     private void handleStaff(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/StaffLogin.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loadScreen(event, "/fxmls/StaffLogin.fxml");
     }
 
     @FXML
@@ -102,25 +86,14 @@ public class CustomerLoginController {
         Dialog<Void> dialog = new Dialog<>();
         dialog.setTitle("Create Account");
 
-        // Buttons
         ButtonType createButton = new ButtonType("Create Account", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(createButton, ButtonType.CANCEL);
 
-        // FORM FIELDS
-        TextField fullName = new TextField();
-        fullName.setPromptText("Full Name");
-
-        TextField username = new TextField();
-        username.setPromptText("Username");
-
-        PasswordField password = new PasswordField();
-        password.setPromptText("Password");
-
-        TextField phone = new TextField();
-        phone.setPromptText("Phone Number");
-
-        TextField address = new TextField();
-        address.setPromptText("Address");
+        TextField fullName = new TextField(); fullName.setPromptText("Full Name");
+        TextField username = new TextField(); username.setPromptText("Username");
+        PasswordField password = new PasswordField(); password.setPromptText("Password");
+        TextField phone = new TextField(); phone.setPromptText("Phone Number");
+        TextField address = new TextField(); address.setPromptText("Address");
 
         ComboBox<String> planBox = new ComboBox<>();
         planBox.getItems().addAll("Monthly", "Yearly");
@@ -133,27 +106,16 @@ public class CustomerLoginController {
         ComboBox<String> classBox = new ComboBox<>();
         classBox.setPromptText("Class");
 
-        // AUTO-UPDATE CLASS OPTIONS
         serviceBox.setOnAction(e -> {
             classBox.getItems().clear();
-
             switch (serviceBox.getValue()) {
-                case "Yoga":
-                    classBox.getItems().addAll("Morning Yoga Flow", "Stretch & Relax", "Power Up");
-                    break;
-                case "Strength Training":
-                    classBox.getItems().addAll("Body Pump Burn", "Core & Stability", "Upper Body Blast");
-                    break;
-                case "HIIT":
-                    classBox.getItems().addAll("HIIT Express", "Total Body Inferno", "Cardio Crush");
-                    break;
-                case "Zumba":
-                    classBox.getItems().addAll("Zumba Dance Party", "Latin Groove", "Pop & Sweat");
-                    break;
+                case "Yoga" -> classBox.getItems().addAll("Morning Yoga Flow", "Stretch & Relax", "Power Up");
+                case "Strength Training" -> classBox.getItems().addAll("Body Pump Burn", "Core & Stability", "Upper Body Blast");
+                case "HIIT" -> classBox.getItems().addAll("HIIT Express", "Total Body Inferno", "Cardio Crush");
+                case "Zumba" -> classBox.getItems().addAll("Zumba Dance Party", "Latin Groove", "Pop & Sweat");
             }
         });
 
-        // LAYOUT
         GridPane grid = new GridPane();
         grid.setVgap(10);
         grid.setHgap(10);
@@ -169,19 +131,15 @@ public class CustomerLoginController {
 
         dialog.getDialogPane().setContent(grid);
 
-        // HANDLE BUTTON PRESS
         dialog.setResultConverter(button -> {
             if (button == createButton) {
-
                 if (fullName.getText().isEmpty() || username.getText().isEmpty() || password.getText().isEmpty() ||
                         phone.getText().isEmpty() || address.getText().isEmpty() ||
                         planBox.getValue() == null || serviceBox.getValue() == null || classBox.getValue() == null) {
-
                     showAlert("Missing Information", "Please fill out all fields.");
                     return null;
                 }
 
-                // SAVE USER TO FILE
                 try (FileWriter writer = new FileWriter("users.txt", true)) {
                     writer.write(username.getText() + "," +
                             password.getText() + "," +
@@ -209,5 +167,17 @@ public class CustomerLoginController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private void loadScreen(ActionEvent event, String fxmlPath) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

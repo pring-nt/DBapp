@@ -17,14 +17,11 @@
       </ImageView>
 
       <!-- TableView for classes -->
-      <TableView fx:id="tblClasses" layoutX="30.0" layoutY="100.0" prefHeight="239.0" prefWidth="541.0">
+      <TableView fx:id="tblClasses" layoutX="104.0" layoutY="97.0" prefHeight="239.0" prefWidth="392.0">
          <columns>
-            <TableColumn fx:id="colClassID" prefWidth="60.0" text="Class ID" />
+            <TableColumn fx:id="colClassID" prefWidth="130.0" text="Class ID" />
             <TableColumn fx:id="colClassName" prefWidth="130.0" text="Class Name" />
-            <TableColumn fx:id="colScheduleDate" prefWidth="100.0" text="Date" />
-            <TableColumn fx:id="colStartTime" prefWidth="100.0" text="Start Time" />
-            <TableColumn fx:id="colEndTime" prefWidth="100.0" text="End Time" />
-            <TableColumn fx:id="colEnrolled" prefWidth="50.0" text="Enrolled" />
+            <TableColumn fx:id="colEnrolled" prefWidth="130.0" text="Enrolled" />
          </columns>
       </TableView>
       <Button fx:id="backBtn" layoutX="210.0" layoutY="354.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="34.0" prefWidth="180.0" />
