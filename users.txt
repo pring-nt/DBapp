@@ -2,3 +2,4 @@ dzuhnee,hi,Ella De Guzman,09331505638,Taft,Monthly,Yoga,Morning Yoga Flow
 daphnedg,11,daphne,11,11,Yearly,Strength Training,Core & Stability
 erylle,hello,erylle galinato,09,12,Monthly,Yoga,Stretch & Relax
 caesar,hi,caesar gomez,09,23,Yearly,Yoga,Stretch & Relax
+raphael,goat,Raph Gonda,0933,Taft,Yearly,raph@gmail.com,2025-11-20,2025-11-25
