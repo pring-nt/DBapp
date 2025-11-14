@@ -6,16 +6,17 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gymdb.controller.AttendanceController">
+<AnchorPane prefHeight="1200.0" prefWidth="1980.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gymdb.controller.AttendanceController">
    <children>
-      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="1000.0" fitWidth="1700.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../pngs/check_attendance.png" />
          </image>
       </ImageView>
-      <Button fx:id="btnBack" layoutX="158.0" layoutY="347.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="25.0" prefWidth="106.0" text="Button" />
-      <ComboBox fx:id="cmbMember" layoutX="114.0" layoutY="187.0" prefWidth="150.0" />
-      <ComboBox fx:id="cmbClassType" layoutX="333.0" layoutY="187.0" prefHeight="26.0" prefWidth="150.0" />
-      <Button fx:id="btnCheckIn" layoutX="323.0" layoutY="347.0" mnemonicParsing="false" onAction="#handleCheckIn" opacity="0.0" prefHeight="25.0" prefWidth="100.0" text="check in" />
+      <Button fx:id="btnBack" layoutX="58.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="39.0" prefWidth="40.0" text="Button" />
+      <ComboBox fx:id="cmbMember" layoutX="833.0" layoutY="319.0" prefHeight="35.0" prefWidth="458.0" />
+      <ComboBox fx:id="cmbClassType" layoutX="833.0" layoutY="450.0" prefHeight="35.0" prefWidth="458.0" />
+      <Button fx:id="btnCheckIn" layoutX="1104.0" layoutY="515.0" mnemonicParsing="false" onAction="#handleCheckIn" opacity="0.0" prefHeight="55.0" prefWidth="190.0" text="check in" />
+      <Button layoutX="112.0" layoutY="357.0" mnemonicParsing="false" onAction="#handleView" opacity="0.0" prefHeight="66.0" prefWidth="231.0" />
    </children>
 </AnchorPane>

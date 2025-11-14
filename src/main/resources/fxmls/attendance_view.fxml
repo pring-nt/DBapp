@@ -7,21 +7,22 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gymdb.controller.AttendanceViewController">
+<AnchorPane prefHeight="1020.0" prefWidth="1980.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gymdb.controller.AttendanceViewController">
    <children>
-      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="1000.0" fitWidth="1700.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../pngs/att_table.png" />
          </image>
       </ImageView>
-      <TableView fx:id="attendanceTable" layoutX="70.0" layoutY="113.0" prefHeight="200.0" prefWidth="462.0">
+      <TableView fx:id="attendanceTable" layoutX="593.0" layoutY="236.0" prefHeight="426.0" prefWidth="592.0">
         <columns>
-          <TableColumn fx:id="colId" prefWidth="100.00003051757812" text="Attendance ID" />
-          <TableColumn fx:id="colDatetime" prefWidth="140.0" text="Date &amp; Time" />
-            <TableColumn fx:id="colMember" prefWidth="100.0" text="Member" />
-            <TableColumn fx:id="colClassType" prefWidth="120.0" text="Class" />
+          <TableColumn fx:id="colId" prefWidth="150.0" text="Attendance ID" />
+          <TableColumn fx:id="colDatetime" prefWidth="150.0" text="Date &amp; Time" />
+            <TableColumn fx:id="colMember" prefWidth="140.0" text="Member" />
+            <TableColumn fx:id="colClassType" prefWidth="150.0" text="Class" />
         </columns>
       </TableView>
-      <Button fx:id="btnBack" layoutX="230.0" layoutY="345.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="25.0" prefWidth="142.0" text="Button" />
+      <Button fx:id="btnBack" layoutX="64.0" layoutY="62.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="40.0" prefWidth="31.0" text="Button" />
+      <Button layoutX="111.0" layoutY="191.0" mnemonicParsing="false" onAction="#handleCheck" opacity="0.0" prefHeight="64.0" prefWidth="192.0" />
    </children>
 </AnchorPane>

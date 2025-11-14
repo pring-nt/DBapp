@@ -230,6 +230,22 @@ public class AttendanceController {
         }
     }
 
+    @FXML
+    private void handleView(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxmls/attendance_view.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert err = new Alert(Alert.AlertType.ERROR, "Failed to open Attendance View screen.");
+            err.setHeaderText(null);
+            err.showAndWait();
+        }
+    }
+
+
     /**
      * showNonBlocking alert (use this for small messages). Avoids showAndWait() during layout.
      */
