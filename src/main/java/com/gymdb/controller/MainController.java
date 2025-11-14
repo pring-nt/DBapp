@@ -71,7 +71,7 @@ public class MainController {
         }
     }
 
-    // 🗑 Handles going to the Remove Member page
+    // Handles going to the Remove Member page
     @FXML
     private void handleRemove(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/remove.fxml"));

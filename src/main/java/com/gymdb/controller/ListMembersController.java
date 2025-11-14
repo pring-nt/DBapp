@@ -64,6 +64,32 @@ public class ListMembersController {
     }
 
     @FXML
+    private void handleEntryForm(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/entry_form.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    @FXML
+    private void handleRemove(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/remove.fxml"));
+        Parent root = loader.load();
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    @FXML
+    private void handleUpdate(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/update.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    @FXML
     private void handleBack(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/fxmls/main-view.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

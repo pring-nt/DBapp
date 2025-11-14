@@ -16,7 +16,7 @@
       <Button fx:id="btnBack" layoutX="229.0" layoutY="346.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="25.0" prefWidth="144.0" text="Button" />
       <ComboBox fx:id="cmbTrainers" layoutX="639.0" layoutY="364.0" prefHeight="51.0" prefWidth="594.0" />
       <Button layoutX="93.0" layoutY="171.0" mnemonicParsing="false" onAction="#handleListTrainers" opacity="0.0" prefHeight="80.0" prefWidth="227.0" />
-      <Button layoutX="96.0" layoutY="355.0" mnemonicParsing="false" onAction="#handleEntry" opacity="0.0" prefHeight="80.0" prefWidth="227.0" />
+      <Button layoutX="64.0" layoutY="54.0" mnemonicParsing="false" onAction="#handleEntry" opacity="0.0" prefHeight="51.0" prefWidth="33.0" />
       <Button layoutX="84.0" layoutY="521.0" mnemonicParsing="false" onAction="#handleRemove" opacity="0.0" prefHeight="80.0" prefWidth="227.0" />
    </children>
 </AnchorPane>

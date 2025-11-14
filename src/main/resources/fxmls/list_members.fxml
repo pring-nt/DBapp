@@ -29,5 +29,8 @@
             <TableColumn fx:id="colEndDate" prefWidth="105.0" text="End Date" />
          </columns>
       </TableView>
+      <Button layoutX="114.0" layoutY="366.0" mnemonicParsing="false" onAction="#handleEntryForm" opacity="0.0" prefHeight="59.0" prefWidth="197.0" />
+      <Button layoutX="114.0" layoutY="531.0" mnemonicParsing="false" onAction="#handleRemove" opacity="0.0" prefHeight="59.0" prefWidth="197.0" />
+      <Button layoutX="104.0" layoutY="728.0" mnemonicParsing="false" onAction="#handleUpdate" opacity="0.0" prefHeight="59.0" prefWidth="197.0" />
    </children>
 </AnchorPane>

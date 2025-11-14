@@ -60,6 +60,7 @@ public class TrainerMenuController {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void handleEntry(ActionEvent event) {
         try {
