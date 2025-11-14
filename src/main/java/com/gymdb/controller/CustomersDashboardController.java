@@ -29,8 +29,8 @@ public class CustomersDashboardController {
     }
 
     @FXML
-    private void handleLocker(ActionEvent event) {
-        System.out.println("Locker clicked");
+    private void handleLocker(ActionEvent event) throws IOException {
+        loadScreen(event, "/fxmls/Locker.fxml");
     }
 
     @FXML
