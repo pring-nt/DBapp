@@ -5,30 +5,34 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gymdb.controller.AdminLoginController">
+<AnchorPane prefHeight="765.0" prefWidth="1417.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gymdb.controller.AdminLoginController">
 
    <children>
       <!-- Background -->
-      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="850.0" fitWidth="1491.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../pngs/login_bg.png" />
          </image>
       </ImageView>
 
       <!-- Username Field -->
-      <TextField fx:id="usernameField" layoutX="196.0" layoutY="203.0" prefHeight="26.0" prefWidth="246.0" promptText="Username" />
+      <TextField fx:id="usernameField" layoutX="135.0" layoutY="491.0" prefHeight="45.0" prefWidth="382.0" promptText="Username">
+         <font>
+            <Font size="24.0" />
+         </font></TextField>
 
       <!-- Password Field -->
-      <TextField fx:id="passwordField" layoutX="195.0" layoutY="239.0" prefHeight="26.0" prefWidth="246.0" promptText="Password" />
+      <TextField fx:id="passwordField" layoutX="136.0" layoutY="562.0" prefHeight="45.0" prefWidth="381.0" promptText="Password">
+         <font>
+            <Font size="24.0" />
+         </font></TextField>
 
       <!-- Login Button -->
-      <Button fx:id="loginButton" layoutX="252.0" layoutY="273.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="40.0" prefWidth="113.0" style="-fx-padding: 0; -fx-border-color: transparent; -fx-background-color: transparent;" />
-
-      <!-- Staff Login Button -->
-      <Button fx:id="staffLoginButton" layoutX="372.0" layoutY="319.0" mnemonicParsing="false" onAction="#handleStaffLogin" prefHeight="26.0" prefWidth="85.0" style="-fx-padding: 0; -fx-border-color: transparent; -fx-background-color: transparent;" />
+      <Button fx:id="loginButton" layoutX="72.0" layoutY="676.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="53.0" prefWidth="384.0" style="-fx-padding: 0; -fx-border-color: transparent; -fx-background-color: transparent;" />
 
       <!-- Customer Login Button -->
-      <Button fx:id="customerLoginButton" layoutX="153.0" layoutY="319.0" mnemonicParsing="false" onAction="#handleCustomerLogin" prefHeight="26.0" prefWidth="93.0" style="-fx-padding: 0; -fx-border-color: transparent; -fx-background-color: transparent;" />
+      <Button fx:id="customerLoginButton" layoutX="1290.0" layoutY="58.0" mnemonicParsing="false" onAction="#handleCustomerLogin" prefHeight="26.0" prefWidth="105.0" style="-fx-padding: 0; -fx-border-color: transparent; -fx-background-color: transparent;" />
    </children>
 </AnchorPane>

@@ -13,6 +13,7 @@ public class CustomerLoginLauncher extends Application {
         Scene scene = new Scene(loader.load());
         primaryStage.setTitle("Customer Login");
         primaryStage.setScene(scene);
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 
