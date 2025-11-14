@@ -27,7 +27,7 @@
         </columns>
       </TableView>
       <Button layoutX="111.0" layoutY="379.0" mnemonicParsing="false" onAction="#handleEntry" opacity="0.0" prefHeight="64.0" prefWidth="195.0" />
-      <Button layoutX="104.0" layoutY="554.0" mnemonicParsing="false" onAction="#handleUpdate" opacity="0.0" prefHeight="64.0" prefWidth="195.0" />
-      <Button layoutX="120.0" layoutY="762.0" mnemonicParsing="false" opacity="0.0" prefHeight="64.0" prefWidth="195.0" />
+      <Button layoutX="104.0" layoutY="554.0" mnemonicParsing="false" onAction="#handleRemove" opacity="0.0" prefHeight="64.0" prefWidth="195.0" />
+      <Button layoutX="120.0" layoutY="762.0" mnemonicParsing="false" onAction="#handleUpdate" opacity="0.0" prefHeight="64.0" prefWidth="195.0" />
    </children>
 </AnchorPane>
