@@ -10,7 +10,7 @@ public class MemberReportLauncher extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/members_report.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/MembersReport.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gymdb.controller.MembersActivityReportController">
+    <children>
+        <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../pngs/mem_report.png" />
+            </image>
+        </ImageView>
+
+        <TableView fx:id="reportTable" layoutX="24.0" layoutY="133.0" prefHeight="183.0" prefWidth="299.0">
+            <columns>
+                <TableColumn fx:id="colMemberName" prefWidth="75.0" text="Member" />
+                <TableColumn fx:id="colSessions" prefWidth="75.0" text="Sessions" />
+                <TableColumn fx:id="colInitialWeight" prefWidth="75.0" text="Initial Weight" />
+                <TableColumn fx:id="colGoalWeight" prefWidth="75.0" text="Goal Weight" />
+                <TableColumn fx:id="colTargetChange" prefWidth="75.0" text="Target Change" />
+                <TableColumn fx:id="colBMIChange" prefWidth="75.0" text="BMI Change" />
+                <TableColumn fx:id="colTrend" prefWidth="75.0" text="BMI Trend" />
+                <TableColumn fx:id="colHealthGoal" prefWidth="75.0" text="Health Goal" />
+            </columns>
+        </TableView>
+
+        <BarChart fx:id="attendanceBarChart" layoutX="388.0" layoutY="50.0" prefHeight="169.0" prefWidth="200.0">
+            <xAxis>
+                <CategoryAxis fx:id="attendanceXAxis" side="BOTTOM" />
+            </xAxis>
+            <yAxis>
+                <NumberAxis fx:id="attendanceYAxis"
+                            side="LEFT"
+                            lowerBound="0"
+                            upperBound="15"
+                            tickUnit="5"
+                            autoRanging="false"/>
+            </yAxis>
+        </BarChart>
+
+        <ComboBox fx:id="cmbMemberReport" layoutX="14.0" layoutY="84.0" prefWidth="150.0" promptText="Select Member:" />
+        <Button fx:id="backBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="49.0" prefWidth="37.0" text="Button" />
+    </children>
+</AnchorPane>

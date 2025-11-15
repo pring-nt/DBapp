@@ -143,4 +143,27 @@ public class PaymentCRUD {
         return total;
     }
 
+    /**
+     * Returns sum(amount) for payments for the given member.
+     * Returns 0.0 on error or if no payments exist.
+     */
+    public double getTotalPaidByMember(int memberID) {
+        String sql = "SELECT SUM(amount) AS total FROM Payment WHERE memberID = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, memberID);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    // use getObject to safely handle NULL
+                    Double total = rs.getObject("total", Double.class);
+                    return total == null ? 0.0 : total;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("getTotalPaidByMember error: " + e.getMessage());
+        }
+        return 0.0;
+    }
+
+
 }
