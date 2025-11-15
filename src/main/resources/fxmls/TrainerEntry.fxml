@@ -18,7 +18,7 @@
       <TextField fx:id="txtLastName" layoutX="900.0" layoutY="295.0" prefHeight="30.0" prefWidth="400.0" />
       <TextField fx:id="txtRecord" layoutX="960.0" layoutY="620.0" prefHeight="30.0" prefWidth="340.0" />
       <ComboBox fx:id="cmbType" layoutX="900.0" layoutY="380.0" prefHeight="30.0" prefWidth="400.0" />
-      <Button fx:id="btnBack" layoutX="160.0" layoutY="347.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="25.0" prefWidth="117.0" text="Button" />
+      <Button fx:id="btnBack" layoutX="66.0" layoutY="63.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="43.0" prefWidth="31.0" text="Button" />
       <Button fx:id="btnSave" layoutX="315.0" layoutY="347.0" mnemonicParsing="false" onAction="#handleSave" opacity="0.0" prefHeight="25.0" prefWidth="117.0" text="Button" />
       <ComboBox fx:id="cmbSchedule" layoutX="900.0" layoutY="460.0" prefHeight="30.0" prefWidth="400.0" />
       <ComboBox fx:id="cmbSpeciality" layoutX="900.0" layoutY="540.0" prefHeight="30.0" prefWidth="400.0" />
