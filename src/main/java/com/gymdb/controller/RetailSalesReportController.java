@@ -29,33 +29,45 @@ public class RetailSalesReportController {
 
     @FXML
     private void initialize() {
+        // Apply your chart CSS
+        totalSalesBarChart.getStylesheets().add(
+                getClass().getResource("/css/charts.css").toExternalForm()
+        );
+        avgSalesPieChart.getStylesheets().add(
+                getClass().getResource("/css/charts.css").toExternalForm()
+        );
+
+        // Load chart data
         loadCharts();
-    }
 
-    private void styleBarChartLabels() {
-        // X-axis label
-        totalSalesBarChart.getXAxis().lookup(".axis-label").setStyle("-fx-text-fill: white;");
-        // Y-axis label
-        totalSalesBarChart.getYAxis().lookup(".axis-label").setStyle("-fx-text-fill: white;");
+        // Ensure pie chart labels exist (color handled later if needed)
+        totalSalesBarChart.getXAxis().setTickLabelFill(javafx.scene.paint.Color.WHITE);
+        totalSalesBarChart.getYAxis().setTickLabelFill(javafx.scene.paint.Color.WHITE);
 
-        // Tick labels
-        totalSalesBarChart.getXAxis().lookupAll(".tick-label").forEach(t -> t.setStyle("-fx-fill: white;"));
-        totalSalesBarChart.getYAxis().lookupAll(".tick-label").forEach(t -> t.setStyle("-fx-fill: white;"));
-    }
+        avgSalesPieChart.setLabelsVisible(true); // doesn’t affect color but makes sure labels exist
 
-    private void stylePieChartLabels() {
-        avgSalesPieChart.getData().forEach(data -> {
-            if (data.getNode() != null) {
-                data.getNode().lookupAll(".chart-pie-label").forEach(n -> n.setStyle("-fx-fill: white;"));
-            }
+
+        // Platform.runLater ensures the nodes exist before styling
+        Platform.runLater(() -> {
+            // 1. X-axis category labels ("Snacks", "Drinks", etc.) → black
+            totalSalesBarChart.getXAxis().lookupAll(".tick-label")
+                    .forEach(n -> n.setStyle("-fx-fill: black;"));
+
+            // 2. Series name / legend ("Total Sales (price × stock)") → black
+            totalSalesBarChart.lookupAll(".chart-legend-item")
+                    .forEach(n -> n.lookupAll(".label")
+                            .forEach(l -> l.setStyle("-fx-text-fill: black;")));
         });
     }
+
 
     @FXML
     private void loadCharts() {
         var reports = crud.getRetailSalesSummary();
 
-        // --- TOTAL SALES BAR CHART ---
+        /* --------------------------
+           TOTAL SALES BAR CHART
+        ---------------------------- */
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Total Sales (price × stock)");
 
@@ -65,71 +77,45 @@ public class RetailSalesReportController {
 
         totalSalesBarChart.getData().add(series);
 
-        // Style bar chart labels after nodes are rendered
-        Platform.runLater(() -> {
-            // Axis labels
-            totalSalesBarChart.getXAxis().lookup(".axis-label").setStyle("-fx-text-fill: white;");
-            totalSalesBarChart.getYAxis().lookup(".axis-label").setStyle("-fx-text-fill: white;");
-
-            // Tick labels
-            totalSalesBarChart.getXAxis().lookupAll(".tick-label").forEach(t -> t.setStyle("-fx-fill: white;"));
-            totalSalesBarChart.getYAxis().lookupAll(".tick-label").forEach(t -> t.setStyle("-fx-fill: white;"));
-
-            // Bar values (if displayed)
-            totalSalesBarChart.lookupAll(".chart-bar").forEach(bar -> {
-                bar.lookupAll(".chart-bar-label").forEach(label -> label.setStyle("-fx-fill: white;"));
-            });
-        });
-
-        // --- AVG SALES PIE CHART ---
+        /* --------------------------
+           AVG SALES PIE CHART
+        ---------------------------- */
         for (RetailSalesReport data : reports) {
-            avgSalesPieChart.getData().add(new PieChart.Data(data.productCategory(), data.avgSalesPerProduct()));
+            avgSalesPieChart.getData().add(
+                    new PieChart.Data(data.productCategory(), data.avgSalesPerProduct())
+            );
         }
-
-        // Style pie chart labels after nodes are rendered
-        Platform.runLater(() -> {
-            avgSalesPieChart.getData().forEach(data -> {
-                if (data.getNode() != null) {
-                    data.getNode().lookupAll(".chart-pie-label").forEach(label -> label.setStyle("-fx-fill: white;"));
-                }
-            });
-        });
     }
 
+    /* --------------------------
+       BUTTON HANDLERS
+    ---------------------------- */
 
     @FXML
-    private void handleLockerUsage(ActionEvent event) throws IOException {
+    private void handleLockerUsage(ActionEvent event) {
         System.out.println("Locker Usage clicked");
     }
 
     @FXML
     private void handleMemberActivity(ActionEvent event) throws IOException {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/MembersReport.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/MembersReport.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     @FXML
-    private void handlePerformanceReward(ActionEvent event) throws IOException {
+    private void handlePerformanceReward(ActionEvent event) {
         System.out.println("Performance Reward clicked");
     }
 
     @FXML
     private void handleBack(ActionEvent event) throws IOException {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/MainMenu.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/MainMenu.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }

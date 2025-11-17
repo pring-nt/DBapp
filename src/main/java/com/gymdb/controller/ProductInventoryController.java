@@ -20,29 +20,14 @@ import java.io.IOException;
 
 public class ProductInventoryController {
 
-    @FXML
-    private Button backbtn;
-
-    @FXML
-    private TableView<Product> productTable;
-
-    @FXML
-    private TableColumn<Product, Integer> colID;
-
-    @FXML
-    private TableColumn<Product, String> colName;
-
-    @FXML
-    private TableColumn<Product, String> colCategory;
-
-    @FXML
-    private TableColumn<Product, Double> colPrice;
-
-    @FXML
-    private TableColumn<Product, Integer> colStock;
-
-    @FXML
-    private TableColumn<Product, Void> colEdit; // New column for Edit button
+    @FXML private Button backbtn;
+    @FXML private TableView<Product> productTable;
+    @FXML private TableColumn<Product, Integer> colID;
+    @FXML private TableColumn<Product, String> colName;
+    @FXML private TableColumn<Product, String> colCategory;
+    @FXML private TableColumn<Product, Double> colPrice;
+    @FXML private TableColumn<Product, Integer> colStock;
+    @FXML private TableColumn<Product, Void> colEdit; // New column for Edit button
 
     private ProductCRUD crud = new ProductCRUD();
     private ObservableList<Product> productList = FXCollections.observableArrayList();
@@ -59,7 +44,6 @@ public class ProductInventoryController {
         // Add Edit button column
         colEdit.setCellFactory(param -> new TableCell<>() {
             private final Button editBtn = new Button("Edit");
-
             {
                 editBtn.setOnAction(event -> {
                     Product product = getTableView().getItems().get(getIndex());
@@ -80,18 +64,15 @@ public class ProductInventoryController {
 
         // Load products from DB
         ObservableList<Product> dbProducts = FXCollections.observableArrayList(crud.getAllRecords());
-
         if (dbProducts.isEmpty()) {
             Product p1 = new Product(0, "Protein Bar", "Snacks", 99.99, 100);
             Product p2 = new Product(0, "Protein Shake", "Drinks", 149.50, 80);
             Product p3 = new Product(0, "Chocolate Shake", "Beverage", 120.00, 50);
             Product p4 = new Product(0, "Energy Drink", "Beverage", 150.00, 30);
-
             crud.addRecord(p1);
             crud.addRecord(p2);
             crud.addRecord(p3);
             crud.addRecord(p4);
-
             productList.addAll(p1, p2, p3, p4);
         } else {
             productList.addAll(dbProducts);
@@ -135,7 +116,6 @@ public class ProductInventoryController {
             dialog.setTitle("Purchase Product");
             dialog.setHeaderText("Enter quantity to buy:");
             dialog.setContentText("Quantity:");
-
             dialog.showAndWait().ifPresent(input -> {
                 try {
                     int qty = Integer.parseInt(input);
@@ -162,6 +142,7 @@ public class ProductInventoryController {
     private void showEditDialog(Product product) {
         Dialog<Product> dialog = new Dialog<>();
         dialog.setTitle("Edit Product");
+
         ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
 
@@ -177,6 +158,7 @@ public class ProductInventoryController {
         grid.addRow(1, new Label("Category:"), categoryField);
         grid.addRow(2, new Label("Price:"), priceField);
         grid.addRow(3, new Label("Stock Qty:"), stockField);
+
         dialog.getDialogPane().setContent(grid);
 
         dialog.setResultConverter(dialogButton -> {
@@ -186,7 +168,6 @@ public class ProductInventoryController {
                     product.setCategory(categoryField.getText());
                     product.setPrice(Double.parseDouble(priceField.getText()));
                     product.setStockQty(Integer.parseInt(stockField.getText()));
-
                     crud.modRecord(product);
                     productTable.refresh();
                     return product;

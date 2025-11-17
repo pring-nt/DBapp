@@ -13,14 +13,12 @@ public class ProductCRUD {
         String sql = "INSERT INTO Product (productName, category, price, stockQty) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setString(1, product.productName());
             stmt.setString(2, product.category());
             stmt.setDouble(3, product.price());
             stmt.setInt(4, product.stockQty());
             stmt.executeUpdate();
             return true;
-
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             return false;
@@ -30,11 +28,9 @@ public class ProductCRUD {
     public List<Product> getAllRecords() {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM Product";
-
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
-
             while (rs.next()) {
                 Product p = new Product(
                         rs.getInt("productID"),
@@ -45,11 +41,9 @@ public class ProductCRUD {
                 );
                 list.add(p);
             }
-
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-
         return list;
     }
 
@@ -57,10 +51,8 @@ public class ProductCRUD {
         String sql = "SELECT * FROM Product WHERE productID = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
-
             if (rs.next()) {
                 return new Product(
                         rs.getInt("productID"),
@@ -70,11 +62,9 @@ public class ProductCRUD {
                         rs.getInt("stockQty")
                 );
             }
-
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-
         return null;
     }
 
@@ -82,7 +72,6 @@ public class ProductCRUD {
         String sql = "UPDATE Product SET productName = ?, category = ?, price = ?, stockQty = ? WHERE productID = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setString(1, product.productName());
             stmt.setString(2, product.category());
             stmt.setDouble(3, product.price());
@@ -90,7 +79,6 @@ public class ProductCRUD {
             stmt.setInt(5, product.productID());
             stmt.executeUpdate();
             return true;
-
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             return false;
@@ -101,17 +89,14 @@ public class ProductCRUD {
         String sql = "DELETE FROM Product WHERE productID = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setInt(1, id);
             stmt.executeUpdate();
             return true;
-
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             return false;
         }
     }
-
 
     // -------------------- UPDATED METHOD --------------------
     public int getTotalProducts() {
@@ -119,11 +104,9 @@ public class ProductCRUD {
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
-
             if (rs.next()) {
                 return rs.getInt("total"); // total units in stock
             }
-
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
@@ -133,21 +116,16 @@ public class ProductCRUD {
     // -------------------- RETAIL SALES REPORT (NO SALES TABLE) --------------------
     public List<RetailSalesReport> getRetailSalesSummary() {
         List<RetailSalesReport> list = new ArrayList<>();
-
         String sql = """
-            SELECT 
-                category,
-                COUNT(*) AS totalProducts,
-                SUM(price * stockQty) AS totalSales,
-                AVG(price * stockQty) AS avgSales
-            FROM Product
-            GROUP BY category
-        """;
-
+                SELECT category, COUNT(*) AS totalProducts,
+                       SUM(price * stockQty) AS totalSales,
+                       AVG(price * stockQty) AS avgSales
+                FROM Product
+                GROUP BY category
+                """;
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-
             while (rs.next()) {
                 list.add(new RetailSalesReport(
                         rs.getString("category"),
@@ -156,14 +134,11 @@ public class ProductCRUD {
                         rs.getDouble("avgSales")
                 ));
             }
-
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-
         return list;
     }
-
 
     // TESTER
     public static void main(String[] args) {

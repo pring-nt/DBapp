@@ -6,13 +6,26 @@ public class Product {
     private String category;
     private double price;
     private int stockQty;
+    private int soldQty; // NEW: tracks units sold
 
+    // Constructor without soldQty (defaults to 0)
     public Product(int productID, String productName, String category, double price, int stockQty) {
         this.productID = productID;
         this.productName = productName;
         this.category = category;
         this.price = price;
         this.stockQty = stockQty;
+        this.soldQty = 0;
+    }
+
+    // Constructor with soldQty
+    public Product(int productID, String productName, String category, double price, int stockQty, int soldQty) {
+        this.productID = productID;
+        this.productName = productName;
+        this.category = category;
+        this.price = price;
+        this.stockQty = stockQty;
+        this.soldQty = soldQty;
     }
 
     // Getters
@@ -21,6 +34,7 @@ public class Product {
     public String category() { return category; }
     public double price() { return price; }
     public int stockQty() { return stockQty; }
+    public int getSoldQty() { return soldQty; } // NEW
 
     // Setters
     public void setProductID(int productID) { this.productID = productID; }
@@ -28,4 +42,5 @@ public class Product {
     public void setCategory(String category) { this.category = category; }
     public void setPrice(double price) { this.price = price; }
     public void setStockQty(int stockQty) { this.stockQty = stockQty; }
+    public void setSoldQty(int soldQty) { this.soldQty = soldQty; } // NEW
 }
