@@ -112,7 +112,6 @@ public class ProductCRUD {
         }
     }
 
-
     // -------------------- UPDATED METHOD --------------------
     public int getTotalProducts() {
         String sql = "SELECT SUM(stockQty) AS total FROM Product"; // sum stockQty
