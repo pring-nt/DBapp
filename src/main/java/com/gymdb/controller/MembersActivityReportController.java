@@ -277,8 +277,35 @@ public class MembersActivityReportController {
     }
 
     @FXML
+    private void handleRetailSales(ActionEvent event) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/RetailSalesReport.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleLockerUsage(ActionEvent event) throws IOException {
+        // TODO: Load Locker Usage Report page
+        System.out.println("Locker Usage clicked");
+        // navigate(event, "/com/gymdb/reports/LockerUsage.fxml");
+    }
+
+    @FXML
+    private void handlePerformanceReward(ActionEvent event) throws IOException {
+        // TODO: Load Performance Reward Report page
+        System.out.println("Performance Reward clicked");
+        // navigate(event, "/com/gymdb/reports/PerformanceReward.fxml");
+    }
+
+    @FXML
     private void handleBack(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/CustomersDashboard.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/MainMenu.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
@@ -311,137 +338,3 @@ public class MembersActivityReportController {
         }
     }
 }
-
-//package com.gymdb.controller;
-//
-//import com.gymdb.reports.MemberActivityReport;
-//import com.gymdb.services.ReportService;
-//import com.gymdb.services.AttendanceEventBus; // add this helper (see notes below)
-//import javafx.application.Platform;
-//import javafx.collections.FXCollections;
-//import javafx.collections.ObservableList;
-//import javafx.event.ActionEvent;
-//import javafx.fxml.FXML;
-//import javafx.fxml.FXMLLoader;
-//import javafx.scene.Node;
-//import javafx.scene.Parent;
-//import javafx.scene.Scene;
-//import javafx.scene.chart.BarChart;
-//import javafx.scene.chart.CategoryAxis;
-//import javafx.scene.chart.NumberAxis;
-//import javafx.scene.chart.XYChart;
-//import javafx.scene.control.*;
-//import javafx.scene.control.cell.PropertyValueFactory;
-//import javafx.stage.Stage;
-//
-//import java.io.IOException;
-//import java.util.List;
-//
-//public class MembersActivityReportController {
-//
-//    // Table and columns
-//    @FXML private TableView<MemberActivityReport> reportTable;
-//    @FXML private TableColumn<MemberActivityReport, String> colMemberName;
-//    @FXML private TableColumn<MemberActivityReport, Integer> colSessions;
-//    @FXML private TableColumn<MemberActivityReport, String> colInitialWeight;
-//    @FXML private TableColumn<MemberActivityReport, String> colGoalWeight;
-//    @FXML private TableColumn<MemberActivityReport, String> colTargetChange;
-//    @FXML private TableColumn<MemberActivityReport, String> colBMIChange;
-//    @FXML private TableColumn<MemberActivityReport, String> colTrend;
-//    @FXML private TableColumn<MemberActivityReport, String> colHealthGoal;
-//
-//    // Optional chart
-//    @FXML private BarChart<String, Number> attendanceBarChart;
-//    @FXML private CategoryAxis attendanceXAxis;
-//    @FXML private NumberAxis attendanceYAxis;
-//
-//    private final ObservableList<MemberActivityReport> tableData = FXCollections.observableArrayList();
-//
-//    @FXML
-//    public void initialize() {
-//        // Configure table columns
-//        if (colMemberName != null) {
-//            colMemberName.setCellValueFactory(c -> new javafx.beans.property.ReadOnlyStringWrapper(c.getValue().memberName()));
-//        }
-//        if (colSessions != null) {
-//            colSessions.setCellValueFactory(c -> new javafx.beans.property.ReadOnlyObjectWrapper<>(c.getValue().sessionsAttended()));
-//        }
-//        if (colInitialWeight != null) {
-//            colInitialWeight.setCellValueFactory(c ->
-//                    new javafx.beans.property.ReadOnlyStringWrapper(String.format("%.1f", c.getValue().initialWeight())));
-//        }
-//        if (colGoalWeight != null) {
-//            colGoalWeight.setCellValueFactory(c ->
-//                    new javafx.beans.property.ReadOnlyStringWrapper(String.format("%.1f", c.getValue().goalWeight())));
-//        }
-//        if (colTargetChange != null) {
-//            colTargetChange.setCellValueFactory(c ->
-//                    new javafx.beans.property.ReadOnlyStringWrapper(String.format("%.1f", c.getValue().targetWeightChange())));
-//        }
-//        if (colBMIChange != null) {
-//            colBMIChange.setCellValueFactory(c ->
-//                    new javafx.beans.property.ReadOnlyStringWrapper(String.format("%.2f", c.getValue().bmiChange())));
-//        }
-//        if (colTrend != null) {
-//            colTrend.setCellValueFactory(c -> new javafx.beans.property.ReadOnlyStringWrapper(c.getValue().bmiTrend()));
-//        }
-//        if (colHealthGoal != null) {
-//            colHealthGoal.setCellValueFactory(c -> new javafx.beans.property.ReadOnlyStringWrapper(
-//                    c.getValue().healthGoal() == null ? "" : c.getValue().healthGoal()
-//            ));
-//        }
-//
-//        // attach list to table
-//        if (reportTable != null) {
-//            reportTable.setItems(tableData);
-//        }
-//
-//        // initial load
-//        loadReports();
-//
-//        // Listen for attendance changes so UI refreshes automatically
-//        // AttendanceEventBus is a tiny helper (see notes).
-//        try {
-//            AttendanceEventBus.addListener((obs, oldVal, newVal) -> Platform.runLater(this::loadReports));
-//        } catch (Throwable ignored) {
-//            // If AttendanceEventBus isn't present yet, no problem — refresh can be manual.
-//        }
-//    }
-//
-//    private void loadReports() {
-//        // fetch from DB using ReportService
-//        List<MemberActivityReport> reports = ReportService.getMemberProgressReports();
-//
-//        Platform.runLater(() -> {
-//            tableData.setAll(reports);
-//
-//            // refresh bar chart if present
-//            if (attendanceBarChart != null) {
-//                attendanceBarChart.getData().clear();
-//                XYChart.Series<String, Number> series = new XYChart.Series<>();
-//                series.setName("Sessions attended");
-//
-//                for (MemberActivityReport r : reports) {
-//                    String name = r.memberName();
-//                    // keep labels short if necessary
-//                    String label = name == null ? "ID:" + r.memberID() : name;
-//                    XYChart.Data<String, Number> d = new XYChart.Data<>(label, r.sessionsAttended());
-//                    series.getData().add(d);
-//                }
-//                attendanceBarChart.getData().add(series);
-//            }
-//        });
-//    }
-//    @FXML
-//    private void handleBack(ActionEvent event) throws IOException {
-//        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/CustomersDashboard.fxml"));
-//        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//        stage.setScene(new Scene(root));
-//        stage.show();
-//    }
-//
-//    // Optional: call this publicly from outside to force refresh
-//    public void forceRefresh() {
-//        loadReports();
-//    }
-//}

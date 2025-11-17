@@ -3,6 +3,8 @@ package com.gymdb.model;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.gymdb.reports.RetailSalesReport;
 import com.gymdb.utils.DBConnection;
 
 public class ProductCRUD {
@@ -110,6 +112,7 @@ public class ProductCRUD {
         }
     }
 
+
     // -------------------- UPDATED METHOD --------------------
     public int getTotalProducts() {
         String sql = "SELECT SUM(stockQty) AS total FROM Product"; // sum stockQty
@@ -126,6 +129,41 @@ public class ProductCRUD {
         }
         return 0;
     }
+
+    // -------------------- RETAIL SALES REPORT (NO SALES TABLE) --------------------
+    public List<RetailSalesReport> getRetailSalesSummary() {
+        List<RetailSalesReport> list = new ArrayList<>();
+
+        String sql = """
+            SELECT 
+                category,
+                COUNT(*) AS totalProducts,
+                SUM(price * stockQty) AS totalSales,
+                AVG(price * stockQty) AS avgSales
+            FROM Product
+            GROUP BY category
+        """;
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                list.add(new RetailSalesReport(
+                        rs.getString("category"),
+                        rs.getInt("totalProducts"),
+                        rs.getDouble("totalSales"),
+                        rs.getDouble("avgSales")
+                ));
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+
+        return list;
+    }
+
 
     // TESTER
     public static void main(String[] args) {
