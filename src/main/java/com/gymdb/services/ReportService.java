@@ -11,13 +11,42 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReportService {
+/**
+ * Centralized service class responsible for generating all report result sets.
+ *
+ * <p>
+ * Each method performs:
+ * <ul>
+ *   <li>SQL query assembly</li>
+ *   <li>Safe DB connection via {@link DBConnection#getConnection()}</li>
+ *   <li>ResultSet iteration and mapping into report record objects</li>
+ *   <li>NULL-safe numeric and date extraction</li>
+ * </ul>
+ *
+ * <p>
+ * No method throws SQL exceptions – failures print to stderr
+ * and return an empty {@code List<>}.
+ *
+ * <p><b>Usage:</b> Call static methods directly:
+ * <pre>
+ *     List&lt;MemberActivityReport&gt; list = ReportService.getMemberProgressReports();
+ * </pre>
+ */
+public abstract class ReportService {
 
     /**
-     * Retrieves member progress report rows using the DB schema fields:
-     * sessions attended, initial/goal weight, BMI change/trend, and the member's stated health goal.
+     * Generates the Member Progress Report.
      *
-     * @return List<MemberActivityReport> empty list on error or when no data exists
+     * <p>Aggregates:
+     * <ul>
+     *   <li>Total sessions attended</li>
+     *   <li>Initial vs goal weight</li>
+     *   <li>BMI change and trend classification</li>
+     *   <li>Member's stated health goal</li>
+     * </ul>
+     *
+     * @return list of {@link MemberActivityReport}; never {@code null}
+     *         (empty if no rows or query failure)
      */
     public static List<MemberActivityReport> getMemberProgressReports() {
         List<MemberActivityReport> list = new ArrayList<>();
@@ -102,6 +131,19 @@ public class ReportService {
         return list;
     }
 
+    /**
+     * Generates the Performance Reward Report.
+     *
+     * <p>Determines:
+     * <ul>
+     *   <li>Total attendance count</li>
+     *   <li>Membership type</li>
+     *   <li>Qualification status (≥10 sessions)</li>
+     * </ul>
+     *
+     * @return list of {@link PerformanceRewardReport}
+     *         or empty list on SQL failure
+     */
     public static List<PerformanceRewardReport> getPerformanceRewardReports() {
         List<PerformanceRewardReport> list = new ArrayList<>();
 
@@ -159,6 +201,22 @@ public class ReportService {
         return list;
     }
 
+    /**
+     * Generates the Locker Usage Report.
+     *
+     * <p>Categorizes lockers into:
+     * <ul>
+     *   <li>Active Rental</li>
+     *   <li>Overdue Rental</li>
+     *   <li>Available</li>
+     * </ul>
+     *
+     * <p>Also computes the percentage share each category occupies
+     * in the Locker table.</p>
+     *
+     * @return list of {@link LockerUsageReport}
+     *         empty on connection or query failure
+     */
     public static List<LockerUsageReport> getLockerUsageReports() {
         List<LockerUsageReport> list = new ArrayList<>();
 
@@ -201,6 +259,19 @@ public class ReportService {
         return list;
     }
 
+    /**
+     * Generates the Retail Sales Report.
+     *
+     * <p>Groups by product category and computes:
+     * <ul>
+     *   <li>Total distinct products</li>
+     *   <li>Total sales revenue</li>
+     *   <li>Average sales per product</li>
+     * </ul>
+     *
+     * @return list of {@link RetailSalesReport}
+     *         empty on SQL error
+     */
     public static List<RetailSalesReport> getRetailSalesReports() {
         List<RetailSalesReport> list = new ArrayList<>();
 
