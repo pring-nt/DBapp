@@ -11,13 +11,38 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReportService {
+/**
+ * Centralized service class responsible for generating all report result sets.
+ *
+ * <p>
+ * Each method performs:
+ * <ul>
+ *   <li>SQL query assembly</li>
+ *   <li>Safe DB connection via {@link DBConnection#getConnection()}</li>
+ *   <li>ResultSet iteration and mapping into report record objects</li>
+ *   <li>NULL-safe numeric and date extraction</li>
+ * </ul>
+ *
+ * <p>
+ * No method throws SQL exceptions – failures print to stderr
+ * and return an empty {@code List<>}.
+ *
+ * <p><b>Usage:</b> Call static methods directly:
+ * <pre>
+ *     List&lt;MemberActivityReport&gt; list = ReportService.getMemberProgressReports();
+ * </pre>
+ */
+public abstract class ReportService {
 
     /**
      * Retrieves member progress report rows using the DB schema fields:
      * sessions attended, initial/goal weight, BMI change/trend, and the member's stated health goal.
      *
-     * @return List<MemberActivityReport> empty list on error or when no data exists
+     * <p>Nullable numeric columns are read with {@code ResultSet#getObject(..., Double.class)}
+     * and defaulted to {@code 0.0} when SQL NULL is encountered. The method returns an
+     * empty list when no rows are found or if an SQL error occurs.</p>
+     *
+     * @return a List of {@link MemberActivityReport} objects; empty list on error or when no data exists
      */
     public static List<MemberActivityReport> getMemberProgressReports() {
         List<MemberActivityReport> list = new ArrayList<>();
@@ -102,6 +127,16 @@ public class ReportService {
         return list;
     }
 
+    /**
+     * Retrieves performance reward qualification information for members.
+     *
+     * <p>The query counts attended sessions per member and returns a qualification
+     * status ("Qualified" when >= 10 sessions, otherwise "Not Qualified").
+     * The result set may contain a nullable {@code end_date} column which is
+     * converted to {@link java.time.LocalDate} when present.</p>
+     *
+     * @return a List of {@link PerformanceRewardReport} objects; empty list on error or when no data exists
+     */
     public static List<PerformanceRewardReport> getPerformanceRewardReports() {
         List<PerformanceRewardReport> list = new ArrayList<>();
 
@@ -159,6 +194,15 @@ public class ReportService {
         return list;
     }
 
+    /**
+     * Retrieves summary of locker usage grouped into categories:
+     * "Active Rental", "Overdue Rental", and "Available".
+     *
+     * <p>Each row contains a category, the raw locker count for that category,
+     * and a human-readable percentage string representing the share of total lockers.</p>
+     *
+     * @return a List of {@link LockerUsageReport} objects; empty list on error or when no data exists
+     */
     public static List<LockerUsageReport> getLockerUsageReports() {
         List<LockerUsageReport> list = new ArrayList<>();
 
@@ -201,6 +245,15 @@ public class ReportService {
         return list;
     }
 
+    /**
+     * Retrieves retail sales metrics grouped by product category.
+     *
+     * <p>The query returns the category label, the count of distinct products in the
+     * category, the summed total sales value (nullable - defaulted to {@code 0.0}),
+     * and the rounded average sales per product.</p>
+     *
+     * @return a List of {@link RetailSalesReport} objects; empty list on error or when no data exists
+     */
     public static List<RetailSalesReport> getRetailSalesReports() {
         List<RetailSalesReport> list = new ArrayList<>();
 
