@@ -35,18 +35,14 @@ import java.util.List;
 public abstract class ReportService {
 
     /**
-     * Generates the Member Progress Report.
+     * Retrieves member progress report rows using the DB schema fields:
+     * sessions attended, initial/goal weight, BMI change/trend, and the member's stated health goal.
      *
-     * <p>Aggregates:
-     * <ul>
-     *   <li>Total sessions attended</li>
-     *   <li>Initial vs goal weight</li>
-     *   <li>BMI change and trend classification</li>
-     *   <li>Member's stated health goal</li>
-     * </ul>
+     * <p>Nullable numeric columns are read with {@code ResultSet#getObject(..., Double.class)}
+     * and defaulted to {@code 0.0} when SQL NULL is encountered. The method returns an
+     * empty list when no rows are found or if an SQL error occurs.</p>
      *
-     * @return list of {@link MemberActivityReport}; never {@code null}
-     *         (empty if no rows or query failure)
+     * @return a List of {@link MemberActivityReport} objects; empty list on error or when no data exists
      */
     public static List<MemberActivityReport> getMemberProgressReports() {
         List<MemberActivityReport> list = new ArrayList<>();
@@ -132,17 +128,14 @@ public abstract class ReportService {
     }
 
     /**
-     * Generates the Performance Reward Report.
+     * Retrieves performance reward qualification information for members.
      *
-     * <p>Determines:
-     * <ul>
-     *   <li>Total attendance count</li>
-     *   <li>Membership type</li>
-     *   <li>Qualification status (≥10 sessions)</li>
-     * </ul>
+     * <p>The query counts attended sessions per member and returns a qualification
+     * status ("Qualified" when >= 10 sessions, otherwise "Not Qualified").
+     * The result set may contain a nullable {@code end_date} column which is
+     * converted to {@link java.time.LocalDate} when present.</p>
      *
-     * @return list of {@link PerformanceRewardReport}
-     *         or empty list on SQL failure
+     * @return a List of {@link PerformanceRewardReport} objects; empty list on error or when no data exists
      */
     public static List<PerformanceRewardReport> getPerformanceRewardReports() {
         List<PerformanceRewardReport> list = new ArrayList<>();
@@ -202,20 +195,13 @@ public abstract class ReportService {
     }
 
     /**
-     * Generates the Locker Usage Report.
+     * Retrieves summary of locker usage grouped into categories:
+     * "Active Rental", "Overdue Rental", and "Available".
      *
-     * <p>Categorizes lockers into:
-     * <ul>
-     *   <li>Active Rental</li>
-     *   <li>Overdue Rental</li>
-     *   <li>Available</li>
-     * </ul>
+     * <p>Each row contains a category, the raw locker count for that category,
+     * and a human-readable percentage string representing the share of total lockers.</p>
      *
-     * <p>Also computes the percentage share each category occupies
-     * in the Locker table.</p>
-     *
-     * @return list of {@link LockerUsageReport}
-     *         empty on connection or query failure
+     * @return a List of {@link LockerUsageReport} objects; empty list on error or when no data exists
      */
     public static List<LockerUsageReport> getLockerUsageReports() {
         List<LockerUsageReport> list = new ArrayList<>();
@@ -260,17 +246,13 @@ public abstract class ReportService {
     }
 
     /**
-     * Generates the Retail Sales Report.
+     * Retrieves retail sales metrics grouped by product category.
      *
-     * <p>Groups by product category and computes:
-     * <ul>
-     *   <li>Total distinct products</li>
-     *   <li>Total sales revenue</li>
-     *   <li>Average sales per product</li>
-     * </ul>
+     * <p>The query returns the category label, the count of distinct products in the
+     * category, the summed total sales value (nullable - defaulted to {@code 0.0}),
+     * and the rounded average sales per product.</p>
      *
-     * @return list of {@link RetailSalesReport}
-     *         empty on SQL error
+     * @return a List of {@link RetailSalesReport} objects; empty list on error or when no data exists
      */
     public static List<RetailSalesReport> getRetailSalesReports() {
         List<RetailSalesReport> list = new ArrayList<>();
