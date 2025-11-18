@@ -84,7 +84,7 @@ public class MainMenuController {
     @FXML private void handleProgressTab(ActionEvent event) { navigate(event, "/fxmls/CustomersProgress.fxml"); }
     @FXML private void handlePaymentsTab(ActionEvent event) { navigate(event, "/fxmls/PaymentForm.fxml"); }
     @FXML private void handleAttendanceTab(ActionEvent event) { navigate(event, "/fxmls/AttendanceMenu.fxml"); }
-    @FXML private void handleLockerTab(ActionEvent event) { navigate(event, "/fxmls/Locker.fxml"); }
+    @FXML private void handleLockerTab(ActionEvent event) { navigate(event, "/fxmls/locker_admin.fxml"); }
     @FXML private void handleProductsTab(ActionEvent event) { navigate(event, "/fxmls/ProductInventory.fxml"); }
     @FXML private void handleReportsTab(ActionEvent event) { navigate(event, "/fxmls/ReportsMenu.fxml"); }
     @FXML private void handleBack(ActionEvent event) { navigate(event, "/fxmls/AdminLogin.fxml"); }

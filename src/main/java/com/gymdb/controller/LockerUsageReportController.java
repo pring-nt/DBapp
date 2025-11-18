@@ -1,7 +1,7 @@
 package com.gymdb.controller;
 
-import com.gymdb.model.Locker;
-import com.gymdb.model.LockerCRUD;
+import com.gymdb.reports.LockerUsageReport;
+import com.gymdb.services.ReportService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,12 +16,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 
 public class LockerUsageReportController {
-
-    private final LockerCRUD lockerCRUD = new LockerCRUD();
 
     @FXML
     private AnchorPane rootPane;
@@ -38,25 +35,17 @@ public class LockerUsageReportController {
     }
 
     private void loadLockerUsageData() {
-        List<Locker> allLockers = lockerCRUD.getAllRecords();
+        List<LockerUsageReport> reports = ReportService.getLockerUsageReports();
 
-        int active = 0;
-        int overdue = 0;
+        ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
 
-        LocalDate today = LocalDate.now();
+        for (LockerUsageReport r : reports) {
+            System.out.println("Category: " + r.category() + ", Count: " + r.lockerCount()); // debug
 
-        for (Locker l : allLockers) {
-            if (l.rentalEndDate() != null && !l.rentalEndDate().isBefore(today)) {
-                active++;
-            } else if (l.rentalEndDate() != null && l.rentalEndDate().isBefore(today) && "occupied".equalsIgnoreCase(l.status())) {
-                overdue++;
+            if (r.lockerCount() > 0) {
+                data.add(new PieChart.Data(r.category() + " (" + r.lockerCount() + ")", r.lockerCount()));
             }
         }
-
-        ObservableList<PieChart.Data> data = FXCollections.observableArrayList(
-                new PieChart.Data("Active Rentals", active),
-                new PieChart.Data("Overdue Rentals", overdue)
-        );
 
         lockerUsageChart.setData(data);
         lockerUsageChart.setTitle("Locker Usage Report");
@@ -65,47 +54,34 @@ public class LockerUsageReportController {
 
     @FXML
     private void handleMemberActivity(ActionEvent event) throws IOException {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/MembersReport.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/MembersReport.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     @FXML
     private void handlePerformanceReward(ActionEvent event) throws IOException {
-        // TODO: Load Performance Reward Report page
         System.out.println("Performance Reward clicked");
-        // navigate(event, "/com/gymdb/reports/PerformanceReward.fxml");
+        // TODO: Navigate to Performance Reward report
     }
 
     @FXML
     private void handleRetailSales(ActionEvent event) throws IOException {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/RetailSalesReport.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/RetailSalesReport.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     @FXML
     private void handleBack(ActionEvent event) throws IOException {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/MainMenu.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/MainMenu.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }
