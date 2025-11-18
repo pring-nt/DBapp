@@ -1,7 +1,7 @@
 package com.gymdb.controller;
 
-import com.gymdb.model.ProductCRUD;
 import com.gymdb.reports.RetailSalesReport;
+import com.gymdb.services.ReportService;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -25,8 +25,6 @@ public class RetailSalesReportController {
     @FXML
     private PieChart avgSalesPieChart;
 
-    private final ProductCRUD crud = new ProductCRUD();
-
     @FXML
     private void initialize() {
         // Apply your chart CSS
@@ -44,16 +42,12 @@ public class RetailSalesReportController {
         totalSalesBarChart.getXAxis().setTickLabelFill(javafx.scene.paint.Color.WHITE);
         totalSalesBarChart.getYAxis().setTickLabelFill(javafx.scene.paint.Color.WHITE);
 
-        avgSalesPieChart.setLabelsVisible(true); // doesn’t affect color but makes sure labels exist
+        avgSalesPieChart.setLabelsVisible(true);
 
-
-        // Platform.runLater ensures the nodes exist before styling
         Platform.runLater(() -> {
-            // 1. X-axis category labels ("Snacks", "Drinks", etc.) → black
             totalSalesBarChart.getXAxis().lookupAll(".tick-label")
                     .forEach(n -> n.setStyle("-fx-fill: black;"));
 
-            // 2. Series name / legend ("Total Sales (price × stock)") → black
             totalSalesBarChart.lookupAll(".chart-legend-item")
                     .forEach(n -> n.lookupAll(".label")
                             .forEach(l -> l.setStyle("-fx-text-fill: black;")));
@@ -63,16 +57,23 @@ public class RetailSalesReportController {
 
     @FXML
     private void loadCharts() {
-        var reports = crud.getRetailSalesSummary();
+        // use ReportService instead of ProductCRUD
+        var reports = ReportService.getRetailSalesReports();
+        totalSalesBarChart.getData().clear();
+        avgSalesPieChart.getData().clear();
+
 
         /* --------------------------
            TOTAL SALES BAR CHART
         ---------------------------- */
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Total Sales (price × stock)");
+        series.setName("Total Sales");
 
         for (RetailSalesReport data : reports) {
-            series.getData().add(new XYChart.Data<>(data.productCategory(), data.totalSales()));
+            series.getData().add(new XYChart.Data<>(
+                    data.productCategory(),
+                    data.totalSales()
+            ));
         }
 
         totalSalesBarChart.getData().add(series);
@@ -82,7 +83,10 @@ public class RetailSalesReportController {
         ---------------------------- */
         for (RetailSalesReport data : reports) {
             avgSalesPieChart.getData().add(
-                    new PieChart.Data(data.productCategory(), data.avgSalesPerProduct())
+                    new PieChart.Data(
+                            data.productCategory(),
+                            data.avgSalesPerProduct()
+                    )
             );
         }
     }

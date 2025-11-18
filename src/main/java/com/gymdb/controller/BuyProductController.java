@@ -2,6 +2,7 @@ package com.gymdb.controller;
 
 import com.gymdb.model.Product;
 import com.gymdb.model.ProductCRUD;
+import com.gymdb.utils.DBConnection;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -111,21 +112,57 @@ public class BuyProductController {
         dialog.showAndWait().ifPresent(input -> {
             try {
                 int qty = Integer.parseInt(input);
+
                 if (qty <= 0) {
                     showAlert("Invalid Quantity", "Enter a number greater than 0.");
-                } else if (qty > product.stockQty()) {
-                    showAlert("Insufficient Stock", "Not enough stock available.");
-                } else {
-                    product.setStockQty(product.stockQty() - qty);
-                    crud.modRecord(product); // Update DB
-                    productTable.refresh();   // Refresh table
-                    showAlert("Purchase Successful", qty + " units of " + product.productName() + " bought.");
+                    return;
                 }
+
+                if (qty > product.stockQty()) {
+                    showAlert("Insufficient Stock", "Not enough stock available.");
+                    return;
+                }
+
+                // ----------------------------
+                // 1️⃣ Reduce stock in Product table
+                // ----------------------------
+                product.setStockQty(product.stockQty() - qty);
+                crud.modRecord(product); // Update Product table
+
+                // ----------------------------
+                // 2️⃣ Insert record into Purchase table
+                // ----------------------------
+                String sql = "INSERT INTO Purchase (memberID, productID, quantity) VALUES (?, ?, ?)";
+                try (var conn = DBConnection.getConnection();
+                     var stmt = conn.prepareStatement(sql)) {
+
+                    stmt.setInt(1, 1); // TODO: Replace with actual logged-in member ID
+                    stmt.setInt(2, product.productID());
+                    stmt.setInt(3, qty);
+                    stmt.executeUpdate();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showAlert("Purchase Failed", "Could not record the purchase.");
+                    return;
+                }
+
+                // ----------------------------
+                // 3️⃣ Refresh table
+                // ----------------------------
+                productTable.refresh();
+
+                // ----------------------------
+                // 4️⃣ Success alert
+                // ----------------------------
+                showAlert("Purchase Successful", qty + " units of " + product.productName() + " bought.");
+
             } catch (NumberFormatException e) {
                 showAlert("Invalid Input", "Please enter a valid number.");
             }
         });
     }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

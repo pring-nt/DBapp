@@ -24,6 +24,9 @@
                 <TableColumn fx:id="colPrice" prefWidth="200.0" text="Price" />
                 <TableColumn fx:id="colStock" prefWidth="200.0" text="Stock Qty" />
                 <TableColumn fx:id="colEdit" prefWidth="150.0" text="Edit" />
+                <TableColumn fx:id="colAdd" text="Add" />
+                <TableColumn fx:id="colDelete" text="Delete" />
+
             </columns>
         </TableView>
       <Button fx:id="backBtn" layoutX="57.0" layoutY="46.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="43.0" prefWidth="26.0" />

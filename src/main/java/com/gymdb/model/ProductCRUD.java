@@ -129,41 +129,6 @@ public class ProductCRUD {
         return 0;
     }
 
-    // -------------------- RETAIL SALES REPORT (NO SALES TABLE) --------------------
-    public List<RetailSalesReport> getRetailSalesSummary() {
-        List<RetailSalesReport> list = new ArrayList<>();
-
-        String sql = """
-            SELECT 
-                category,
-                COUNT(*) AS totalProducts,
-                SUM(price * stockQty) AS totalSales,
-                AVG(price * stockQty) AS avgSales
-            FROM Product
-            GROUP BY category
-        """;
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                list.add(new RetailSalesReport(
-                        rs.getString("category"),
-                        rs.getInt("totalProducts"),
-                        rs.getDouble("totalSales"),
-                        rs.getDouble("avgSales")
-                ));
-            }
-
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
-
-        return list;
-    }
-
-
     // TESTER
     public static void main(String[] args) {
         ProductCRUD crud = new ProductCRUD();

@@ -2,6 +2,7 @@ package com.gymdb.controller;
 
 import com.gymdb.model.Product;
 import com.gymdb.model.ProductCRUD;
+import com.gymdb.utils.DBConnection;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -42,7 +43,13 @@ public class ProductInventoryController {
     private TableColumn<Product, Integer> colStock;
 
     @FXML
-    private TableColumn<Product, Void> colEdit; // New column for Edit button
+    private TableColumn<Product, Void> colEdit;
+
+    @FXML
+    private TableColumn<Product, Void> colAdd;
+    @FXML
+    private TableColumn<Product, Void> colDelete;
+
 
     private ProductCRUD crud = new ProductCRUD();
     private ObservableList<Product> productList = FXCollections.observableArrayList();
@@ -78,6 +85,51 @@ public class ProductInventoryController {
             }
         });
 
+        // Add button column
+        colAdd.setCellFactory(param -> new TableCell<>() {
+            private final Button addBtn = new Button("Add");
+
+            {
+                addBtn.setOnAction(event -> {
+                    Product product = getTableView().getItems().get(getIndex());
+                    showAddDialog(); // Opens dialog to add new product
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(addBtn);
+                }
+            }
+        });
+
+// Delete button column
+        colDelete.setCellFactory(param -> new TableCell<>() {
+            private final Button deleteBtn = new Button("Delete");
+
+            {
+                deleteBtn.setOnAction(event -> {
+                    Product product = getTableView().getItems().get(getIndex());
+                    handleDelete(product);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(deleteBtn);
+                }
+            }
+        });
+
+
         // Load products from DB
         ObservableList<Product> dbProducts = FXCollections.observableArrayList(crud.getAllRecords());
 
@@ -110,53 +162,18 @@ public class ProductInventoryController {
     }
 
     // Delete selected product
-    @FXML
-    private void handleDelete() {
-        Product selected = productTable.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            boolean deleted = crud.delRecord(selected.productID());
+    private void handleDelete(Product product) {
+        if (product != null) {
+            boolean deleted = crud.delRecord(product.productID());
             if (deleted) {
-                productList.remove(selected);
+                productList.remove(product);
                 showAlert("Deleted", "Product removed successfully.");
             } else {
                 showAlert("Delete Failed", "Could not delete the selected product.");
             }
-        } else {
-            showAlert("No Selection", "Please select a product to delete.");
         }
     }
 
-    // Buy product and reduce stock
-    @FXML
-    private void handleBuy() {
-        Product selected = productTable.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            TextInputDialog dialog = new TextInputDialog("1");
-            dialog.setTitle("Purchase Product");
-            dialog.setHeaderText("Enter quantity to buy:");
-            dialog.setContentText("Quantity:");
-
-            dialog.showAndWait().ifPresent(input -> {
-                try {
-                    int qty = Integer.parseInt(input);
-                    if (qty <= 0) {
-                        showAlert("Invalid Quantity", "Please enter a number greater than 0.");
-                    } else if (qty > selected.stockQty()) {
-                        showAlert("Insufficient Stock", "Not enough stock available.");
-                    } else {
-                        selected.setStockQty(selected.stockQty() - qty);
-                        crud.modRecord(selected);
-                        productTable.refresh();
-                        showAlert("Purchase Successful", qty + " units purchased.");
-                    }
-                } catch (NumberFormatException e) {
-                    showAlert("Invalid Input", "Please enter a valid number.");
-                }
-            });
-        } else {
-            showAlert("No Selection", "Please select a product to buy.");
-        }
-    }
 
     // Edit product dialog
     private void showEditDialog(Product product) {
@@ -199,6 +216,51 @@ public class ProductInventoryController {
 
         dialog.showAndWait();
     }
+
+    private void showAddDialog() {
+        Dialog<Product> dialog = new Dialog<>();
+        dialog.setTitle("Add Product");
+        ButtonType addButtonType = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(addButtonType, ButtonType.CANCEL);
+
+        TextField nameField = new TextField();
+        TextField categoryField = new TextField();
+        TextField priceField = new TextField();
+        TextField stockField = new TextField();
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.addRow(0, new Label("Name:"), nameField);
+        grid.addRow(1, new Label("Category:"), categoryField);
+        grid.addRow(2, new Label("Price:"), priceField);
+        grid.addRow(3, new Label("Stock Qty:"), stockField);
+
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == addButtonType) {
+                try {
+                    Product newProduct = new Product(
+                            0,
+                            nameField.getText(),
+                            categoryField.getText(),
+                            Double.parseDouble(priceField.getText()),
+                            Integer.parseInt(stockField.getText())
+                    );
+                    crud.addRecord(newProduct);
+                    productList.add(newProduct);
+                    return newProduct;
+                } catch (NumberFormatException e) {
+                    showAlert("Invalid Input", "Please enter valid numeric values for price and stock.");
+                }
+            }
+            return null;
+        });
+
+        dialog.showAndWait();
+    }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
