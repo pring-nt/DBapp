@@ -57,7 +57,8 @@ public class LockerAdminController {
                     memberName
             ));
         } else {
-            list.add(new LockerDetails(lockerID, "N/A", null, null, ""));
+            list.add(new LockerDetails(lockerID, "Vacant", null, null, ""));
+
         }
 
         Stage popupStage = new Stage();
@@ -156,18 +157,33 @@ public class LockerAdminController {
      * Compute a friendly status string using locker.status() and whether a member is assigned.
      */
     private String computeStatus(Locker locker, String memberName) {
-        if (locker == null) return "N/A";
-        // if locker.status explicitly says "occupied"/"available", use that (normalized)
+        if (locker == null) return "Vacant";  // changed from "N/A" to "Vacant"
+
         String st = locker.status();
         if (st != null) {
             if (st.equalsIgnoreCase("occupied")) return "Occupied";
             if (st.equalsIgnoreCase("available") || st.equalsIgnoreCase("vacant")) return "Vacant";
         }
-        // otherwise infer from member assignment / rental dates
+
         if (memberName != null && !memberName.isBlank()) return "Occupied";
         if (locker.rentalStartDate() != null || locker.rentalEndDate() != null) return "Occupied";
-        return "Vacant";
+
+        return "Vacant";  // default if no member or rental dates
     }
+
+//    private String computeStatus(Locker locker, String memberName) {
+//        if (locker == null) return "N/A";
+//        // if locker.status explicitly says "occupied"/"available", use that (normalized)
+//        String st = locker.status();
+//        if (st != null) {
+//            if (st.equalsIgnoreCase("occupied")) return "Occupied";
+//            if (st.equalsIgnoreCase("available") || st.equalsIgnoreCase("vacant")) return "Vacant";
+//        }
+//        // otherwise infer from member assignment / rental dates
+//        if (memberName != null && !memberName.isBlank()) return "Occupied";
+//        if (locker.rentalStartDate() != null || locker.rentalEndDate() != null) return "Occupied";
+//        return "Vacant";
+//    }
 
     /**
      * Look up the member (first + last) who currently has this lockerID (if any).
@@ -188,7 +204,6 @@ public class LockerAdminController {
         }
         return "";
     }
-
     private boolean showEditDialogAndSave(LockerDetails ld, Stage popupStage) {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Edit Locker " + ld.getLockerID());
@@ -196,44 +211,209 @@ public class LockerAdminController {
         ButtonType saveBtn = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(saveBtn, ButtonType.CANCEL);
 
-        TextField statusField = new TextField(ld.getStatus());
+        // Status ComboBox
+        ComboBox<String> statusCombo = new ComboBox<>();
+        statusCombo.getItems().addAll("Occupied", "Vacant");
+        String initialStatus = ld.getStatus();
+        if (initialStatus == null || initialStatus.isBlank() || initialStatus.equalsIgnoreCase("N/A")) {
+            initialStatus = "Vacant";
+        }
+        statusCombo.setValue(initialStatus);
+
+        // Member ComboBox
+        ComboBox<String> memberCombo = new ComboBox<>();
+        memberCombo.getItems().add("None"); // option to remove member
+        List<Member> allMembers = memberCRUD.getAllRecords();
+        for (Member m : allMembers) {
+            String name = (m.firstName() == null ? "" : m.firstName()) + " " +
+                    (m.lastName() == null ? "" : m.lastName()) +
+                    " (ID: " + m.memberID() + ")";
+            memberCombo.getItems().add(name);
+        }
+        memberCombo.setValue(ld.getMemberName().isBlank() ? "None" : ld.getMemberName());
+
+        // DatePickers
         DatePicker startDatePicker = new DatePicker(ld.getRentalStartDate());
         DatePicker endDatePicker = new DatePicker(ld.getRentalEndDate());
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.addRow(0, new Label("Status:"), statusField);
-        grid.addRow(1, new Label("Start Date:"), startDatePicker);
-        grid.addRow(2, new Label("End Date:"), endDatePicker);
+        grid.addRow(0, new Label("Status:"), statusCombo);
+        grid.addRow(1, new Label("Member:"), memberCombo);
+        grid.addRow(2, new Label("Start Date:"), startDatePicker);
+        grid.addRow(3, new Label("End Date:"), endDatePicker);
 
         dialog.getDialogPane().setContent(grid);
 
         Optional<ButtonType> result = dialog.showAndWait();
 
         if (result.isPresent() && result.get() == saveBtn) {
-            ld.setStatus(statusField.getText());
+            String selectedStatus = statusCombo.getValue();
+            String selectedMember = memberCombo.getValue();
+
+            ld.setStatus(selectedStatus);
+            ld.setMemberName(selectedMember.equals("None") ? "" : selectedMember);
             ld.setRentalStartDate(startDatePicker.getValue());
             ld.setRentalEndDate(endDatePicker.getValue());
 
+            // Prepare Locker object
             Locker l = new Locker(ld.getLockerID(), ld.getStatus(), ld.getRentalStartDate(), ld.getRentalEndDate());
 
             try {
-                // Check if locker exists
+                // Update locker in DB
                 if (lockerCRUD.getRecord(l.lockerID()) != null) {
-                    lockerCRUD.modRecord(l);  // UPDATE
+                    lockerCRUD.modRecord(l);
                 } else {
-                    lockerCRUD.addRecord(l);  // INSERT
+                    lockerCRUD.addRecord(l);
                 }
-                popupStage.close(); // auto-close
+
+                // Clear locker assignment from previous member(s)
+                for (Member m : allMembers) {
+                    if (m.lockerID() != null && m.lockerID() == l.lockerID()) {
+                        Member updatedMember = new Member(
+                                m.memberID(), m.firstName(), m.lastName(), m.email(), m.contactNo(),
+                                m.membershipType(), m.startDate(), m.endDate(), m.healthGoal(),
+                                m.initialWeight(), m.goalWeight(), m.startBMI(), m.updatedBMI(),
+                                m.classID(), m.trainerID(),
+                                null // clear locker assignment
+                        );
+                        memberCRUD.modRecord(updatedMember);
+                    }
+                }
+
+                // Assign locker to the selected member if not None and status is Occupied
+                if (!selectedMember.equals("None") && selectedStatus.equalsIgnoreCase("Occupied")) {
+                    // Extract member ID from ComboBox string
+                    int memberID = Integer.parseInt(selectedMember.replaceAll(".*\\(ID: (\\d+)\\).*", "$1"));
+                    Member m = memberCRUD.getRecord(memberID);
+                    if (m != null) {
+                        Member updatedMember = new Member(
+                                m.memberID(), m.firstName(), m.lastName(), m.email(), m.contactNo(),
+                                m.membershipType(), m.startDate(), m.endDate(), m.healthGoal(),
+                                m.initialWeight(), m.goalWeight(), m.startBMI(), m.updatedBMI(),
+                                m.classID(), m.trainerID(),
+                                l.lockerID() // assign locker
+                        );
+                        memberCRUD.modRecord(updatedMember);
+                    }
+                }
+
+                popupStage.close();
                 return true;
+
             } catch (Exception ex) {
                 showAlert("Save failed", "Could not save locker to database: " + ex.getMessage());
                 return false;
             }
         }
+
         return false;
     }
+
+
+//    private boolean showEditDialogAndSave(LockerDetails ld, Stage popupStage) {
+//        Dialog<ButtonType> dialog = new Dialog<>();
+//        dialog.setTitle("Edit Locker " + ld.getLockerID());
+//
+//        ButtonType saveBtn = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+//        dialog.getDialogPane().getButtonTypes().addAll(saveBtn, ButtonType.CANCEL);
+//
+//        // ComboBox for status instead of TextField
+//        ComboBox<String> statusCombo = new ComboBox<>();
+//        statusCombo.getItems().addAll("Occupied", "Vacant");
+//
+//        // Set initial value based on current status
+//        String initialStatus = ld.getStatus();
+//        if (initialStatus == null || initialStatus.isBlank() || initialStatus.equalsIgnoreCase("N/A")) {
+//            initialStatus = "Vacant";
+//        }
+//        statusCombo.setValue(initialStatus);
+//
+//        DatePicker startDatePicker = new DatePicker(ld.getRentalStartDate());
+//        DatePicker endDatePicker = new DatePicker(ld.getRentalEndDate());
+//
+//        GridPane grid = new GridPane();
+//        grid.setHgap(10);
+//        grid.setVgap(10);
+//        grid.addRow(0, new Label("Status:"), statusCombo);
+//        grid.addRow(1, new Label("Start Date:"), startDatePicker);
+//        grid.addRow(2, new Label("End Date:"), endDatePicker);
+//
+//        dialog.getDialogPane().setContent(grid);
+//
+//        Optional<ButtonType> result = dialog.showAndWait();
+//
+//        if (result.isPresent() && result.get() == saveBtn) {
+//            ld.setStatus(statusCombo.getValue());
+//            ld.setRentalStartDate(startDatePicker.getValue());
+//            ld.setRentalEndDate(endDatePicker.getValue());
+//
+//            Locker l = new Locker(ld.getLockerID(), ld.getStatus(), ld.getRentalStartDate(), ld.getRentalEndDate());
+//
+//            try {
+//                // Check if locker exists
+//                if (lockerCRUD.getRecord(l.lockerID()) != null) {
+//                    lockerCRUD.modRecord(l);  // UPDATE
+//                } else {
+//                    lockerCRUD.addRecord(l);  // INSERT
+//                }
+//                popupStage.close(); // auto-close
+//                return true;
+//            } catch (Exception ex) {
+//                showAlert("Save failed", "Could not save locker to database: " + ex.getMessage());
+//                return false;
+//            }
+//        }
+//        return false;
+//    }
+
+
+//    private boolean showEditDialogAndSave(LockerDetails ld, Stage popupStage) {
+//        Dialog<ButtonType> dialog = new Dialog<>();
+//        dialog.setTitle("Edit Locker " + ld.getLockerID());
+//
+//        ButtonType saveBtn = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+//        dialog.getDialogPane().getButtonTypes().addAll(saveBtn, ButtonType.CANCEL);
+//
+//        TextField statusField = new TextField(ld.getStatus());
+//        DatePicker startDatePicker = new DatePicker(ld.getRentalStartDate());
+//        DatePicker endDatePicker = new DatePicker(ld.getRentalEndDate());
+//
+//        GridPane grid = new GridPane();
+//        grid.setHgap(10);
+//        grid.setVgap(10);
+//        grid.addRow(0, new Label("Status:"), statusField);
+//        grid.addRow(1, new Label("Start Date:"), startDatePicker);
+//        grid.addRow(2, new Label("End Date:"), endDatePicker);
+//
+//        dialog.getDialogPane().setContent(grid);
+//
+//        Optional<ButtonType> result = dialog.showAndWait();
+//
+//        if (result.isPresent() && result.get() == saveBtn) {
+//            ld.setStatus(statusField.getText());
+//            ld.setRentalStartDate(startDatePicker.getValue());
+//            ld.setRentalEndDate(endDatePicker.getValue());
+//
+//            Locker l = new Locker(ld.getLockerID(), ld.getStatus(), ld.getRentalStartDate(), ld.getRentalEndDate());
+//
+//            try {
+//                // Check if locker exists
+//                if (lockerCRUD.getRecord(l.lockerID()) != null) {
+//                    lockerCRUD.modRecord(l);  // UPDATE
+//                } else {
+//                    lockerCRUD.addRecord(l);  // INSERT
+//                }
+//                popupStage.close(); // auto-close
+//                return true;
+//            } catch (Exception ex) {
+//                showAlert("Save failed", "Could not save locker to database: " + ex.getMessage());
+//                return false;
+//            }
+//        }
+//        return false;
+//    }
 
     private void showAlert(String title, String message) {
         Alert a = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
