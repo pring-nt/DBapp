@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/24.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.gymdb.controller.PerformanceRewardReportController">
+    <children>
+        <ImageView fitHeight="400.0" fitWidth="600.0" layoutX="-1.0" layoutY="-2.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../pngs/performace_report.png" />
+            </image>
+        </ImageView>
+
+        <VBox layoutX="30.0" layoutY="30.0" spacing="10.0"
+              AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="20.0"
+              AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="20.0">
+
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
+                <Label text="Performance Reward - Qualified Members"
+                       style="-fx-font-size:16px; -fx-font-weight:bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <ComboBox fx:id="cmbFilter" promptText="Filter" prefWidth="150.0"/>
+                <Button fx:id="btnRefresh" text="Refresh"/>
+                <Button fx:id="btnBack" text="Back"/>
+            </HBox>
+
+            <TableView fx:id="tblRewards" prefHeight="480.0">
+                <columns>
+                    <TableColumn fx:id="colMemberName" text="Member" prefWidth="240.0"/>
+                    <TableColumn fx:id="colTotalSessions" text="Sessions" prefWidth="90.0"/>
+                    <TableColumn fx:id="colMembershipType" text="Membership Type" prefWidth="140.0"/>
+                    <TableColumn fx:id="colEndDate" text="Membership End Date" prefWidth="150.0"/>
+                    <TableColumn fx:id="colStatus" text="Qualification" prefWidth="140.0"/>
+                </columns>
+            </TableView>
+
+        </VBox>
+    </children>
+</AnchorPane>

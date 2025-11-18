@@ -43,9 +43,15 @@ public class ReportsMenuController {
 
     @FXML
     private void handlePerformanceReward(ActionEvent event) throws IOException {
-        // TODO: Load Performance Reward Report page
-        System.out.println("Performance Reward clicked");
-        // navigate(event, "/com/gymdb/reports/PerformanceReward.fxml");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/PerformanceRewardReport.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
