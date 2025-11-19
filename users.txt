@@ -4,3 +4,4 @@ erylle,hello,erylle galinato,09,12,Monthly,Yoga,Stretch & Relax
 caesar,hi,caesar gomez,09,23,Yearly,Yoga,Stretch & Relax
 raphael,goat,Raph Gonda,0933,Taft,Yearly,raph@gmail.com,2025-11-20,2025-11-25
 fitz,gerald,Liv Fitzgerald,09,12,Monthly,@sh,2025-11-06,2025-11-20
+erylle,erylle,erylle,0933,taft,Yearly,erylle@gmail.com,2025-11-19,2025-11-29

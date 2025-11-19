@@ -1,6 +1,7 @@
 package com.gymdb.controller;
 
 import com.gymdb.model.*;
+import com.gymdb.utils.DBConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -61,20 +62,40 @@ public class MainMenuController {
             int activeMembers = memberCRUD.getActiveMembers().size();
             int activeTrainers = gymPersonnelCRUD.getActiveTrainers().size();
             int availableEquipments = equipmentCRUD.getAvailableEquipments().size();
-            int availableProducts = productCRUD.getTotalProducts(); // NOW mapped correctly
-            double totalEarnings = paymentCRUD.getTotalEarnings();
+            int availableProducts = productCRUD.getTotalProducts(); // Show products here
 
+            // ----------------------------
+            // Calculate total earnings from Purchase table
+            // ----------------------------
+            double totalEarnings = 0;
+            String sql = "SELECT SUM(p.quantity * pr.price) AS totalEarnings " +
+                    "FROM Purchase p JOIN Product pr ON p.productID = pr.productID";
+            try (var conn = DBConnection.getConnection();
+                 var stmt = conn.createStatement();
+                 var rs = stmt.executeQuery(sql)) {
+
+                if (rs.next()) {
+                    totalEarnings = rs.getDouble("totalEarnings");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // ----------------------------
+            // Update text fields
+            // ----------------------------
             totalMembersField.setText(String.valueOf(totalMembers));
             activeMembersField.setText(String.valueOf(activeMembers));
             activeTrainersField.setText(String.valueOf(activeTrainers));
             availableEquipmentsField.setText(String.valueOf(availableEquipments));
-            availableProductsField.setText(String.valueOf(availableProducts)); // SHOW products here
+            availableProductsField.setText(String.valueOf(availableProducts));
             totalEarningsField.setText("₱" + totalEarnings);
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
 
     // -------------------- Button Navigation Handlers --------------------
     @FXML private void handleMembersTab(ActionEvent event) { navigate(event, "/fxmls/main-view.fxml"); }

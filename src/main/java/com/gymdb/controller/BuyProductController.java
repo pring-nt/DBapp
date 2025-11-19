@@ -148,12 +148,27 @@ public class BuyProductController {
                 }
 
                 // ----------------------------
-                // 3️⃣ Refresh table
+                // 3️⃣ Update total earnings
+                // ----------------------------
+                String updateEarnings = "UPDATE Sales SET totalEarnings = totalEarnings + ? WHERE saleID = 1";
+                try (var conn = DBConnection.getConnection();
+                     var stmt = conn.prepareStatement(updateEarnings)) {
+
+                    stmt.setDouble(1, product.price() * qty);
+                    stmt.executeUpdate();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showAlert("Earnings Update Failed", "Could not update total earnings.");
+                }
+
+                // ----------------------------
+                // 4️⃣ Refresh table
                 // ----------------------------
                 productTable.refresh();
 
                 // ----------------------------
-                // 4️⃣ Success alert
+                // 5️⃣ Success alert
                 // ----------------------------
                 showAlert("Purchase Successful", qty + " units of " + product.productName() + " bought.");
 
