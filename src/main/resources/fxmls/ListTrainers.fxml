@@ -15,15 +15,15 @@
          </image>
       </ImageView>
       <Button fx:id="btnBack" layoutX="55.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="31.0" prefWidth="143.0" text="Button" />
-      <TableView fx:id="trainersTable" layoutX="772.0" layoutY="364.0" prefHeight="200.0" prefWidth="564.0">
+      <TableView fx:id="trainersTable" layoutX="611.0" layoutY="269.0" prefHeight="444.0" prefWidth="787.0">
         <columns>
           <TableColumn fx:id="colId" prefWidth="75.0" text="ID" />
-          <TableColumn fx:id="colFirstName" prefWidth="75.0" text="First Name" />
-            <TableColumn fx:id="colLastName" prefWidth="75.0" text="Last Name" />
-            <TableColumn fx:id="colType" prefWidth="75.0" text="Type" />
-            <TableColumn fx:id="colSchedule" prefWidth="75.0" text="Schedule" />
-            <TableColumn fx:id="colRecord" prefWidth="75.0" text="Instructor Record" />
-            <TableColumn fx:id="colSpeciality" prefWidth="75.0" text="Speciality" />
+          <TableColumn fx:id="colFirstName" prefWidth="100.0" text="First Name" />
+            <TableColumn fx:id="colLastName" prefWidth="100.0" text="Last Name" />
+            <TableColumn fx:id="colType" prefWidth="100.0" text="Type" />
+            <TableColumn fx:id="colSchedule" prefWidth="150.0" text="Schedule" />
+            <TableColumn fx:id="colRecord" prefWidth="150.0" text="Instructor Record" />
+            <TableColumn fx:id="colSpeciality" prefWidth="120.0" text="Speciality" />
         </columns>
       </TableView>
       <Button layoutX="111.0" layoutY="379.0" mnemonicParsing="false" onAction="#handleEntry" opacity="0.0" prefHeight="64.0" prefWidth="195.0" />
