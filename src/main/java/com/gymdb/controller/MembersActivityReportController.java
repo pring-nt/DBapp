@@ -658,7 +658,7 @@ public class MembersActivityReportController {
 
     @FXML
     private void handleBack(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/MainMenu.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/ReportsMenu.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();

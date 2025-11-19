@@ -209,8 +209,8 @@ public abstract class ReportService {
         String sql = """
         SELECT
             CASE
-                WHEN status = 'rented' AND rentalEndDate >= CURDATE() THEN 'Active Rental'
-                WHEN status = 'rented' AND rentalEndDate < CURDATE() THEN 'Overdue Rental'
+                WHEN status = 'Occupied' AND rentalEndDate >= CURDATE() THEN 'Active Rental'
+                WHEN status = 'Occupied' AND rentalEndDate < CURDATE() THEN 'Overdue Rental'
                 ELSE 'Available'
             END AS category,
             COUNT(*) AS locker_count,

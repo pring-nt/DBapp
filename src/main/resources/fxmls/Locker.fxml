@@ -16,15 +16,15 @@
     </ImageView>
 
     <!-- Locker Buttons -->
-    <Button fx:id="locker1" layoutX="327.0" layoutY="238.0" mnemonicParsing="false" onAction="#handleLocker" opacity="0.0" prefHeight="180.0" prefWidth="170.0" text="1" />
-    <Button fx:id="locker2" layoutX="634.0" layoutY="239.0" mnemonicParsing="false" onAction="#handleLocker" opacity="0.0" prefHeight="176.0" prefWidth="173.0" text="2" />
-    <Button fx:id="locker3" layoutX="951.0" layoutY="245.0" mnemonicParsing="false" onAction="#handleLocker" opacity="0.0" prefHeight="172.0" prefWidth="159.0" text="3" />
-    <Button fx:id="locker4" layoutX="332.0" layoutY="453.0" mnemonicParsing="false" onAction="#handleLocker" opacity="0.0" prefHeight="157.0" prefWidth="166.0" text="4" />
-    <Button fx:id="locker5" layoutX="637.0" layoutY="448.0" mnemonicParsing="false" onAction="#handleLocker" opacity="0.0" prefHeight="172.0" prefWidth="168.0" text="5" />
-    <Button fx:id="locker6" layoutX="954.0" layoutY="452.0" mnemonicParsing="false" onAction="#handleLocker" opacity="0.0" prefHeight="165.0" prefWidth="151.0" text="6" />
-    <Button fx:id="locker7" layoutX="334.0" layoutY="665.0" mnemonicParsing="false" onAction="#handleLocker" opacity="0.0" prefHeight="164.0" prefWidth="174.0" text="7" />
-    <Button fx:id="locker8" layoutX="632.0" layoutY="663.0" mnemonicParsing="false" onAction="#handleLocker" opacity="0.0" prefHeight="177.0" prefWidth="172.0" text="8" />
-    <Button fx:id="locker9" layoutX="944.0" layoutY="663.0" mnemonicParsing="false" onAction="#handleLocker" opacity="0.0" prefHeight="163.0" prefWidth="161.0" text="9" />
+    <Button fx:id="locker1" layoutX="443.0" layoutY="233.0" mnemonicParsing="false" onAction="#handleLocker" opacity="0.0" prefHeight="180.0" prefWidth="170.0" text="1" />
+    <Button fx:id="locker2" layoutX="732.0" layoutY="230.0" mnemonicParsing="false" onAction="#handleLocker" opacity="0.0" prefHeight="176.0" prefWidth="173.0" text="2" />
+    <Button fx:id="locker3" layoutX="1002.0" layoutY="245.0" mnemonicParsing="false" onAction="#handleLocker" opacity="0.0" prefHeight="172.0" prefWidth="159.0" text="3" />
+    <Button fx:id="locker4" layoutX="441.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleLocker" opacity="0.0" prefHeight="157.0" prefWidth="166.0" text="4" />
+    <Button fx:id="locker5" layoutX="725.0" layoutY="446.0" mnemonicParsing="false" onAction="#handleLocker" opacity="0.0" prefHeight="172.0" prefWidth="168.0" text="5" />
+    <Button fx:id="locker6" layoutX="1014.0" layoutY="438.0" mnemonicParsing="false" onAction="#handleLocker" opacity="0.0" prefHeight="165.0" prefWidth="151.0" text="6" />
+    <Button fx:id="locker7" layoutX="432.0" layoutY="622.0" mnemonicParsing="false" onAction="#handleLocker" opacity="0.0" prefHeight="164.0" prefWidth="174.0" text="7" />
+    <Button fx:id="locker8" layoutX="725.0" layoutY="625.0" mnemonicParsing="false" onAction="#handleLocker" opacity="0.0" prefHeight="177.0" prefWidth="172.0" text="8" />
+    <Button fx:id="locker9" layoutX="1028.0" layoutY="645.0" mnemonicParsing="false" onAction="#handleLocker" opacity="0.0" prefHeight="163.0" prefWidth="161.0" text="9" />
       <Button fx:id="backBtn" layoutX="64.0" layoutY="65.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="36.0" prefWidth="31.0" />
   </children>
 </AnchorPane>

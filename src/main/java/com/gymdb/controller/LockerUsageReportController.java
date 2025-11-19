@@ -32,6 +32,27 @@ public class LockerUsageReportController {
     @FXML
     public void initialize() {
         loadLockerUsageData();
+
+        javafx.application.Platform.runLater(() -> {
+
+            // PIE LABELS → make white
+            lockerUsageChart.lookupAll(".chart-pie-label").forEach(label -> {
+                label.setStyle("-fx-fill: white; -fx-font-size: 16px;");
+            });
+
+            // CHART TITLE → keep black
+            if (lockerUsageChart.lookup(".chart-title") != null) {
+                lockerUsageChart.lookup(".chart-title")
+                        .setStyle("-fx-text-fill: black;");
+            }
+
+            // LEGEND TEXT → keep black
+            lockerUsageChart.lookupAll(".chart-legend-item").forEach(item -> {
+                if (item.lookup(".label") != null) {
+                    item.lookup(".label").setStyle("-fx-text-fill: black;");
+                }
+            });
+        });
     }
 
     private void loadLockerUsageData() {
@@ -48,8 +69,8 @@ public class LockerUsageReportController {
         }
 
         lockerUsageChart.setData(data);
-        lockerUsageChart.setTitle("Locker Usage Report");
         lockerUsageChart.setLabelsVisible(true);
+
     }
 
     @FXML
@@ -78,7 +99,7 @@ public class LockerUsageReportController {
 
     @FXML
     private void handleBack(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/MainMenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/ReportsMenu.fxml"));
         Parent root = loader.load();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));

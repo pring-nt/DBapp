@@ -21,7 +21,7 @@
             </image>
         </ImageView>
 
-        <TableView fx:id="reportTable" layoutX="491.0" layoutY="180.0" prefHeight="274.0" prefWidth="619.0">
+        <TableView fx:id="reportTable" layoutX="494.0" layoutY="262.0" prefHeight="207.0" prefWidth="461.0">
             <columns>
                 <TableColumn fx:id="colMemberName" prefWidth="75.0" text="Member" />
                 <TableColumn fx:id="colSessions" prefWidth="75.0" text="Sessions" />
@@ -34,7 +34,7 @@
             </columns>
         </TableView>
 
-        <BarChart fx:id="attendanceBarChart" layoutX="1153.0" layoutY="510.0" prefHeight="335.0" prefWidth="446.0">
+        <BarChart fx:id="attendanceBarChart" layoutX="990.0" layoutY="538.0" prefHeight="248.0" prefWidth="380.0">
             <xAxis>
                 <CategoryAxis fx:id="attendanceXAxis" side="BOTTOM" />
             </xAxis>
@@ -43,7 +43,7 @@
             </yAxis>
         </BarChart>
 
-        <LineChart fx:id="bmiLineChart" layoutX="1128.0" layoutY="166.0" prefHeight="335.0" prefWidth="495.0">
+        <LineChart fx:id="bmiLineChart" layoutX="954.0" layoutY="250.0" prefHeight="270.0" prefWidth="432.0">
             <xAxis>
                 <CategoryAxis fx:id="bmiXAxis" label="Date" />
             </xAxis>
@@ -53,11 +53,11 @@
         </LineChart>
 
 
-        <ComboBox fx:id="cmbMemberReport" layoutX="850.0" layoutY="129.0" prefHeight="30.0" prefWidth="400.0" promptText="Select Member:" />
+        <ComboBox fx:id="cmbMemberReport" layoutX="808.0" layoutY="195.0" prefHeight="30.0" prefWidth="400.0" promptText="Select Member:" />
         <Button fx:id="backBtn" layoutX="60.0" layoutY="58.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="49.0" prefWidth="37.0" text="Button" />
       <Button layoutX="115.0" layoutY="720.0" mnemonicParsing="false" onAction="#handleRetailSales" opacity="0.0" prefHeight="66.0" prefWidth="233.0" />
       <Button layoutX="118.0" layoutY="531.0" mnemonicParsing="false" onAction="#handlePerformanceReward" opacity="0.0" prefHeight="66.0" prefWidth="276.0" />
       <Button layoutX="111.0" layoutY="187.0" mnemonicParsing="false" onAction="#handleLockerUsage" opacity="0.0" prefHeight="66.0" prefWidth="276.0" />
-      <PieChart fx:id="planPieChart" layoutX="569.0" layoutY="487.0" prefHeight="387.0" prefWidth="524.0" />
+      <PieChart fx:id="planPieChart" layoutX="533.0" layoutY="470.0" prefHeight="297.0" prefWidth="380.0" />
     </children>
 </AnchorPane>
