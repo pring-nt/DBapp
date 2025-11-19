@@ -21,14 +21,14 @@
       <TextField fx:id="txtFirstName" layoutX="885.0" layoutY="190.0" prefHeight="30.0" prefWidth="465.0" />
       <TextField fx:id="txtLastName" layoutX="885.0" layoutY="240.0" prefHeight="30.0" prefWidth="465.0" />
       <TextField fx:id="txtEmail" layoutX="885.0" layoutY="290.0" prefHeight="30.0" prefWidth="465.0" />
-      <TextField fx:id="txtContact" layoutX="950.0" layoutY="350.0" prefHeight="30.0" prefWidth="400.0" />
-      <TextField fx:id="txtHealthGoal" layoutX="885.0" layoutY="510.0" prefHeight="30.0" prefWidth="465.0" />
-      <TextField fx:id="txtInitialWeight" layoutX="885.0" layoutY="560.0" prefHeight="30.0" prefWidth="465.0" />
-      <TextField fx:id="txtGoalWeight" layoutX="885.0" layoutY="615.0" prefHeight="30.0" prefWidth="465.0" />
-      <DatePicker fx:id="dpStartDate" layoutX="885.0" layoutY="670.0" prefHeight="30.0" prefWidth="465.0" />
-      <DatePicker fx:id="dpEndDate" layoutX="885.0" layoutY="720.0" prefHeight="30.0" prefWidth="465.0" />
+      <TextField fx:id="txtContact" layoutX="950.0" layoutY="340.0" prefHeight="30.0" prefWidth="400.0" />
+      <TextField fx:id="txtHealthGoal" layoutX="885.0" layoutY="480.0" prefHeight="30.0" prefWidth="465.0" />
+      <TextField fx:id="txtInitialWeight" layoutX="885.0" layoutY="530.0" prefHeight="30.0" prefWidth="465.0" />
+      <TextField fx:id="txtGoalWeight" layoutX="885.0" layoutY="585.0" prefHeight="30.0" prefWidth="465.0" />
+      <DatePicker fx:id="dpStartDate" layoutX="885.0" layoutY="680.0" prefHeight="30.0" prefWidth="465.0" />
+      <DatePicker fx:id="dpEndDate" layoutX="885.0" layoutY="735.0" prefHeight="30.0" prefWidth="465.0" />
       <Button fx:id="btnSubmit" layoutX="1210.0" layoutY="772.0" mnemonicParsing="false" onAction="#handleSubmit" opacity="0.0" prefHeight="49.0" prefWidth="123.0" text="Button" />
-      <ComboBox fx:id="cmbMembership" layoutX="885.0" layoutY="400.0" prefHeight="30.0" prefWidth="465.0">
+      <ComboBox fx:id="cmbMembership" layoutX="885.0" layoutY="385.0" prefHeight="30.0" prefWidth="465.0">
               <items>
                  <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Monthly" />
@@ -39,5 +39,6 @@
       <Button layoutX="108.0" layoutY="199.0" mnemonicParsing="false" onAction="#handleAllMembers" opacity="0.0" prefHeight="48.0" prefWidth="214.0" />
       <Button layoutX="101.0" layoutY="536.0" mnemonicParsing="false" onAction="#handleRemove" opacity="0.0" prefHeight="48.0" prefWidth="214.0" />
       <Button layoutX="95.0" layoutY="738.0" mnemonicParsing="false" onAction="#handleUpdate" opacity="0.0" prefHeight="48.0" prefWidth="214.0" />
+      <TextField fx:id="txtStartBMI" layoutX="884.0" layoutY="634.0" prefHeight="30.0" prefWidth="465.0" />
    </children>
 </AnchorPane>
