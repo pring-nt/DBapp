@@ -26,6 +26,7 @@ public class EntryFormController {
     @FXML private TextField txtGoalWeight;
     @FXML private DatePicker dpStartDate;
     @FXML private DatePicker dpEndDate;
+    @FXML private TextField txtStartBMI; // <-- new field
 
     @FXML
     private void handleSubmit(ActionEvent event) {
@@ -45,6 +46,9 @@ public class EntryFormController {
             Double goalWeight = txtGoalWeight.getText().isEmpty()
                     ? null : Double.parseDouble(txtGoalWeight.getText());
 
+            Double startBMI = txtStartBMI.getText().isEmpty()
+                    ? null : Double.parseDouble(txtStartBMI.getText());
+
             // Create a Member object — IDs handled by DB (AUTO_INCREMENT)
             Member member = new Member(
                     0,
@@ -58,7 +62,8 @@ public class EntryFormController {
                     healthGoal,
                     initialWeight,
                     goalWeight,
-                    null, null, // startBMI, updatedBMI
+                    startBMI,    // pass start BMI here
+                    null,        // updatedBMI (initially null)
                     null, null, null // classID, trainerID, lockerID
             );
 
@@ -80,6 +85,13 @@ public class EntryFormController {
                 alert.showAndWait();
             }
 
+        } catch (NumberFormatException nfe) {
+            nfe.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid number");
+            alert.setHeaderText(null);
+            alert.setContentText("Please enter valid numeric values for weight/BMI fields.");
+            alert.showAndWait();
         } catch (Exception e) {
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -99,6 +111,7 @@ public class EntryFormController {
         txtHealthGoal.clear();
         txtInitialWeight.clear();
         txtGoalWeight.clear();
+        txtStartBMI.clear(); // clear new field
         dpStartDate.setValue(null);
         dpEndDate.setValue(null);
     }
@@ -137,3 +150,143 @@ public class EntryFormController {
         stage.show();
     }
 }
+
+//package com.gymdb.controller;
+//
+//import com.gymdb.model.Member;
+//import com.gymdb.model.MemberCRUD;
+//import javafx.event.ActionEvent;
+//import javafx.fxml.FXML;
+//import javafx.fxml.FXMLLoader;
+//import javafx.scene.Node;
+//import javafx.scene.Parent;
+//import javafx.scene.Scene;
+//import javafx.scene.control.*;
+//import javafx.stage.Stage;
+//
+//import java.io.IOException;
+//import java.time.LocalDate;
+//
+//public class EntryFormController {
+//
+//    @FXML private TextField txtFirstName;
+//    @FXML private TextField txtLastName;
+//    @FXML private TextField txtEmail;
+//    @FXML private TextField txtContact;
+//    @FXML private ComboBox<String> cmbMembership;
+//    @FXML private TextField txtHealthGoal;
+//    @FXML private TextField txtInitialWeight;
+//    @FXML private TextField txtGoalWeight;
+//    @FXML private DatePicker dpStartDate;
+//    @FXML private DatePicker dpEndDate;
+//
+//    @FXML
+//    private void handleSubmit(ActionEvent event) {
+//        try {
+//            // Collect data from the form
+//            String firstName = txtFirstName.getText();
+//            String lastName = txtLastName.getText();
+//            String email = txtEmail.getText();
+//            String contactNo = txtContact.getText();
+//            String membershipType = cmbMembership.getValue();
+//            String healthGoal = txtHealthGoal.getText();
+//            LocalDate startDate = dpStartDate.getValue();
+//            LocalDate endDate = dpEndDate.getValue();
+//
+//            Double initialWeight = txtInitialWeight.getText().isEmpty()
+//                    ? null : Double.parseDouble(txtInitialWeight.getText());
+//            Double goalWeight = txtGoalWeight.getText().isEmpty()
+//                    ? null : Double.parseDouble(txtGoalWeight.getText());
+//
+//            // Create a Member object — IDs handled by DB (AUTO_INCREMENT)
+//            Member member = new Member(
+//                    0,
+//                    firstName,
+//                    lastName,
+//                    email,
+//                    contactNo,
+//                    membershipType,
+//                    startDate,
+//                    endDate,
+//                    healthGoal,
+//                    initialWeight,
+//                    goalWeight,
+//                    null, null, // startBMI, updatedBMI
+//                    null, null, null // classID, trainerID, lockerID
+//            );
+//
+//            // Save to DB using your groupmate's MemberCRUD
+//            MemberCRUD crud = new MemberCRUD();
+//            boolean success = crud.addRecord(member);
+//
+//            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//            if (success) {
+//                alert.setTitle("Success");
+//                alert.setHeaderText(null);
+//                alert.setContentText("Member successfully registered!");
+//                alert.showAndWait();
+//                clearForm();
+//            } else {
+//                alert.setTitle("Error");
+//                alert.setHeaderText(null);
+//                alert.setContentText("Failed to register member.");
+//                alert.showAndWait();
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            Alert alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setTitle("Error");
+//            alert.setHeaderText(null);
+//            alert.setContentText("Please fill in all required fields correctly.");
+//            alert.showAndWait();
+//        }
+//    }
+//
+//    private void clearForm() {
+//        txtFirstName.clear();
+//        txtLastName.clear();
+//        txtEmail.clear();
+//        txtContact.clear();
+//        cmbMembership.getSelectionModel().clearSelection();
+//        txtHealthGoal.clear();
+//        txtInitialWeight.clear();
+//        txtGoalWeight.clear();
+//        dpStartDate.setValue(null);
+//        dpEndDate.setValue(null);
+//    }
+//
+//    @FXML
+//    private void handleAllMembers(ActionEvent event) throws IOException {
+//        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/list_members.fxml"));
+//        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        stage.setScene(new Scene(root));
+//        stage.show();
+//    }
+//
+//    @FXML
+//    private void handleUpdate(ActionEvent event) throws IOException {
+//        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/update.fxml"));
+//        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        stage.setScene(new Scene(root));
+//        stage.show();
+//    }
+//
+//    @FXML
+//    private void handleRemove(ActionEvent event) throws IOException {
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/remove.fxml"));
+//        Parent root = loader.load();
+//
+//        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        stage.setScene(new Scene(root));
+//        stage.show();
+//    }
+//
+//    @FXML
+//    private void handleBack(ActionEvent event) throws IOException {
+//        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/main-view.fxml"));
+//        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        stage.setScene(new Scene(root));
+//        stage.show();
+//    }
+//}
